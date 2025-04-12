@@ -5,13 +5,48 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
+@layer base {
+  :root {
+    /* Primary */
+    --color-primary-50: #F7F5FF;
+    --color-primary-75: #EDE9FE;
+    --color-primary-100: #D7CFF9;
+    --color-primary-200: #AA99EC;
+    --color-primary-300: #8D75F7;
+    --color-primary-400: #483B8C;
+    --color-primary: #644FC1;
+
+    /* Secondary */
+    --color-secondary-50: #DBEEFF;
+    --color-secondary-75: #3CABFF;
+    --color-secondary-100: #0881EA;
+    --color-secondary-200: #4829D3;
+    --color-secondary-300: #18066C;
+    --color-secondary-400: #0B003E;
+    --color-secondary: #270F94;
+
+    /* Grayscale */
+    --color-black: #0C0C0C;
+    --color-white: #FFFFFF;
+    --color-gray-1: #2D2D2D;
+    --color-gray-2: #444444;
+    --color-gray-3: #505050;
+    --color-gray-4: #717171;
+
+    --color-light-1: #959595;
+    --color-light-2: #C7C6C6;
+    --color-light-3: #E7E7E7;
+    --color-light-4: #F5F5F5;
+
+    /* Status Colors */
+    --color-error: #C91433;
+    --color-error-light: #FAE7EB;
+    --color-success: #146C43;
+    --color-success-light: #D1F7E5;
+  }
+  
+  }
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
