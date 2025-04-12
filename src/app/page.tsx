@@ -1,3 +1,5 @@
+import GoogleLoginButton from "./components/GoogleLoginButton";
+
 // app/page.tsx
 interface Item {
   id: number;
@@ -47,6 +49,7 @@ export default async function TestPage() {
           </li>
         ))}
       </ul>
+      <GoogleLoginButton/>
     </div>
   );
 }
