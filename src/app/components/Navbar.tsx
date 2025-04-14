@@ -19,9 +19,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full sticky top-0 bg-background/70 backdrop-blur-lg h-[4rem] px-4 z-50">
-      <div className="container mx-auto flex items-center justify-end h-full">
-        <ul className="hidden md:flex gap-5 items-center justify-center text-sm text-gray-3 absolute left-1/2 transform -translate-x-1/2">
+    <nav className="w-full flex justify-center sticky top-0 bg-background/70 backdrop-blur-lg h-[4rem] px-4 z-50">
+      <div className="container mx-auto flex items-center justify-center h-full relative">
+        
+        {/* Desktop Menu */}
+        <ul className="hidden md:flex gap-5 items-center text-sm text-gray-3">
           {navItems.map((item) => (
             <li key={item.href} className="text-medium whitespace-nowrap">
               <Link
@@ -34,8 +36,9 @@ export default function Navbar() {
           ))}
         </ul>
 
+        {/* Hamburger Button */}
         <button
-          className="md:hidden focus:outline-none"
+          className="md:hidden absolute right-0 focus:outline-none"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -47,17 +50,15 @@ export default function Navbar() {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white w-64 h-screen absolute top-[4rem] right-0 shadow-lg">
-          <ul className="flex flex-col items-start gap-4   justify-center text-sm text-gray-3">
+        <div className="md:hidden bg-white w-64 h-screen absolute top-[4rem] right-1 shadow-lg">
+          <ul className="flex flex-col items-start gap-4 text-sm text-gray-3 p-6">
             {navItems.map((item) => (
-              <li
-                key={item.href}
-                className="text-medium  whitespace-nowrap  gap-x-3"
-              >
+              <li key={item.href} className="text-medium whitespace-nowrap">
                 <Link
                   href={item.href}
-                  className="text-foreground text-start hover:opacity-80 transition-opacity pr-6"
+                  className="text-foreground text-start hover:opacity-80 transition-opacity"
                   onClick={toggleMenu}
                 >
                   {item.name}
