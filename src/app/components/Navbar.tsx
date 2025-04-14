@@ -6,7 +6,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 const navItems = [
   { name: "Home", href: "/" },
-  { name: "Explore", href: "/explore" },
+  { name: "Brand and organization", href: "/explore" },
   { name: "About Us", href: "/about" },
   { name: "Help & Support", href: "/help" },
 ];
@@ -19,7 +19,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full flex justify-center sticky top-0 bg-background/70 backdrop-blur-lg h-[4rem] px-4 z-50">
+    <nav className="w-full flex justify-center  top-0 bg-background/70 backdrop-blur-lg h-[4rem] px-4 z-50">
       <div className="container mx-auto flex items-center justify-center h-full relative">
         
         {/* Desktop Menu */}
