@@ -10,13 +10,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
-type UserFormData = {
+export type UserFormData = {
   identifier: string;
   password: string;
 };
 
 
-const schema = yup.object({
+export const schema = yup.object({
   identifier: yup.string().required("Identifier is required"),
   password: yup
     .string()

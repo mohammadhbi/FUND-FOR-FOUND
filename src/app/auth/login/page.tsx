@@ -1,3 +1,4 @@
+"use client";
 
 import Image from "next/image";
 import LogoAuth from "../../../asests/LogoAuth.svg";

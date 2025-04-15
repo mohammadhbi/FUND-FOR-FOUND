@@ -1,6 +1,5 @@
-import GoogleLoginButton from "./auth/components/GoogleLoginButton";
+import Link from "next/link";
 
-// app/page.tsx
 interface Item {
   id: number;
   documentId: string;
@@ -24,9 +23,9 @@ interface ApiResponse {
 }
 
 export default async function TestPage() {
-  const res = await fetch("http://localhost:1337/api/tests"); // عوض کن اگه اسم فرق داره
+  const res = await fetch("http://localhost:1337/api/tests");
   const response = await res.json();
-  console.log("API Response:", response); // اینو توی سرور لاگ می‌کنه (ترمینال Next.js)
+  console.log("API Response:", response);
 
   const { data }: ApiResponse = response;
 
@@ -49,7 +48,7 @@ export default async function TestPage() {
           </li>
         ))}
       </ul>
-      <GoogleLoginButton/>
+      <Link href="/auth/Login">Log in</Link>
     </div>
   );
 }
