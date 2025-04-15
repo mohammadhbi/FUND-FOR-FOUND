@@ -11,7 +11,7 @@ function Forgotpassword() {
         <Image src={ForgotpasswordI} alt="" width={109.77} height={100} />
         <p className="text-[var(--color-primary)] text-3xl">Trouble With logging in?</p>
         <p className="text-[var(--color-gray-2)] text-xs text-center">
-          Enter your email address or phone number and we'll{" "}
+          Enter your email address or phone number and we ًll{" "}
           <span className="block text-center">send you a link to get back into your account.</span>
         </p>
         <div className="flex flex-col  w-full max-w-md p-4">
