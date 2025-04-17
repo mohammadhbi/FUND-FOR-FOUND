@@ -8,6 +8,7 @@ import clsx from "clsx";
 import axios from "axios";
 import { toast } from 'react-toastify';
 
+
 function ConfirmCode() {
   const searchParams = useSearchParams();
   const phoneNumber = searchParams.get("phone");
@@ -98,7 +99,7 @@ function ConfirmCode() {
 
           <div className="bg-white p-6 rounded-lg text-center w-80 shadow-lg z-10 animate-scaleIn">
             <p className="text-lg font-medium mb-4">
-              A confirmationzz code has been sent to
+              A confirmation code has been sent to
             </p>
             <p className="text-[var(--color-primary)] mb-4">{phoneNumber}</p>
             <button

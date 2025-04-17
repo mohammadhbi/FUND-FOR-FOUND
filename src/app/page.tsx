@@ -49,6 +49,7 @@ export default async function TestPage() {
         ))}
       </ul>
       <Link href="/auth/Login">Log in</Link>
+      <Link href="/auth/signup"> signup</Link>
     </div>
   );
 }
