@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Suspense, useRef, useState } from "react";
 import clsx from "clsx";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 function ConfirmCode() {
   const searchParams = useSearchParams();
@@ -76,14 +77,14 @@ function ConfirmCode() {
         code: code,
       });
       
-      if (res.ok) {
-        alert("Code confirmed successfully!");
+      if (res.status === 200) {
+        toast.success("Code confirmed successfully!");
       } else {
-        alert("Invalid code. Please try again.");
+        toast.error("Failed to confirm code.");
       }
     } catch (err) {
-      console.error("Error confirming code", err);
-      alert("Server error.");
+      console.error("There was an error:", err);
+    toast.error("There was an error verifying the code.");
     } finally {
       setLoading(false);
     }
