@@ -12,7 +12,10 @@ function ConfirmCode() {
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [showModal,setShowModal]=useState(true);
+  const handleCloseModal = ()=>{
+    setShowModal(false);
+  }
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -87,6 +90,18 @@ function ConfirmCode() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+       {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                  <div className="bg-white p-6 rounded-lg text-center w-80">
+                    <p className="text-lg font-medium mb-4">
+                    A confirmation code has been sent to
+                    </p>
+                    <p className="text-[var(--color-primary)] mb-4">
+      {phoneNumber}
+                    </p>
+                  </div>
+                </div>
+              )}
       <div className="flex flex-col justify-center items-center pt-16">
         <h1 className="text-[var(--color-primary)] text-3xl">FUND FOR FOUND</h1>
         <Image src={LogoAuth} alt="" width={109.77} height={100} />
