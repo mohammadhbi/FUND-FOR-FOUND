@@ -5,6 +5,7 @@ import LogoAuth from "../../../../../public/LogoAuth.svg";
 import Image from "next/image";
 import { Suspense, useRef, useState } from "react";
 import clsx from "clsx";
+import axios from "axios";
 
 function ConfirmCode() {
   const searchParams = useSearchParams();
@@ -12,10 +13,10 @@ function ConfirmCode() {
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showModal,setShowModal]=useState(true);
-  const handleCloseModal = ()=>{
+  const [showModal, setShowModal] = useState(true);
+  const handleCloseModal = () => {
     setShowModal(false);
-  }
+  };
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -25,7 +26,7 @@ function ConfirmCode() {
       handlePaste(value, index);
       return;
     }
-    e.target.value = value.replace(/[^0-9]/g, ""); 
+    e.target.value = value.replace(/[^0-9]/g, "");
     if (value && index < 5) {
       inputsRef.current[index + 1]?.focus();
     }
@@ -69,12 +70,12 @@ function ConfirmCode() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:1337/api/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: phoneNumber, code }),
+    
+      const res = await axios.post("http://localhost:1337/api/verify-code", {
+        phone: phoneNumber,
+        code: code,
       });
-
+      
       if (res.ok) {
         alert("Code confirmed successfully!");
       } else {
@@ -90,18 +91,25 @@ function ConfirmCode() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-       {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                  <div className="bg-white p-6 rounded-lg text-center w-80">
-                    <p className="text-lg font-medium mb-4">
-                    A confirmation code has been sent to
-                    </p>
-                    <p className="text-[var(--color-primary)] mb-4">
-      {phoneNumber}
-                    </p>
-                  </div>
-                </div>
-              )}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center">
+          <div className="absolute inset-0 bg-[#959595ab] backdrop-blur-sm pointer-events-none animate-fadeIn"></div>
+
+          <div className="bg-white p-6 rounded-lg text-center w-80 shadow-lg z-10 animate-scaleIn">
+            <p className="text-lg font-medium mb-4">
+              A confirmationzz code has been sent to
+            </p>
+            <p className="text-[var(--color-primary)] mb-4">{phoneNumber}</p>
+            <button
+              onClick={handleCloseModal}
+              className="mt-4 px-4 py-2 bg-[var(--color-primary)] text-white rounded"
+            >
+              Okay
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col justify-center items-center pt-16">
         <h1 className="text-[var(--color-primary)] text-3xl">FUND FOR FOUND</h1>
         <Image src={LogoAuth} alt="" width={109.77} height={100} />
