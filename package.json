@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@tanstack/react-query": "^5.73.3",
     "axios": "^1.8.4",
+    "husky": "^9.1.7",
     "next": "15.3.0",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
