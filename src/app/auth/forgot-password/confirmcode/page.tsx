@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import LogoAuth from "../../../../../public/LogoAuth.svg";
+import LogoAuth from "../../../../../public/LogoAuth.png";
 import Image from "next/image";
 import { Suspense, useRef, useState } from "react";
 import clsx from "clsx";
@@ -73,7 +73,7 @@ function ConfirmCode() {
 
     try {
     
-      const res = await axios.post("http://localhost:1337/api/verify-code", {
+      const res = await axios.post("https://my-strapi-project-lm3x.onrender.com/api/verify-code", {
         phone: phoneNumber,
         code: code,
       });

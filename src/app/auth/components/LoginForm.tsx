@@ -43,7 +43,7 @@ export default function LoginForm() {
     console.log("form data:", user);
 
     try {
-      const response = await axios.post("http://localhost:1337/api/auth/local", user);
+      const response = await axios.post("https://my-strapi-project-lm3x.onrender.com/api/auth/local", user);
       localStorage.setItem("token", response.data.jwt);
       console.log("called", response.data.user.username);
 

@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import LogoAuth from "../../../../public/LogoAuth.svg"
+import LogoAuth from "../../../../public/LogoAuth.png"
 import Image from "next/image"
 import { Suspense } from "react";
 function ConfirmCode() {

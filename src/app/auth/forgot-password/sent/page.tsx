@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import sentp from "../../../../../public/SentP.svg";
+import sentp from "../../../../../public/SentP.png";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";

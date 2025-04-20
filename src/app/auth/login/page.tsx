@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import LogoAuth from "../../../asests/LogoAuth.svg";
+import LogoAuth from "../../../../public/LogoAuth.png";
 import GoogleLoginButton from "@/app/auth/components/GoogleLoginButton";
 import LoginForm from "@/app/auth/components/LoginForm";
 import Navbar from "@/app/components/Navbar";

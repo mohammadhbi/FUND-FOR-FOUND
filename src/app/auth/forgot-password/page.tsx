@@ -3,7 +3,7 @@
 import Navbar from "@/app/components/Navbar";
 import Image from "next/image";
 import Link from "next/link";
-import ForgotpasswordI from "../../../../public/ForgotpasswordI.svg";
+import ForgotpasswordI from "../../../../public/ForgotpasswordI.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";

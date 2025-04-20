@@ -23,7 +23,7 @@ interface ApiResponse {
 }
 
 export default async function TestPage() {
-  const res = await fetch("http://localhost:1337/api/tests");
+  const res = await fetch("https://my-strapi-project-lm3x.onrender.com/api/tests");
   const response = await res.json();
   console.log("API Response:", response);
 

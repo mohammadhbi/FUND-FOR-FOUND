@@ -1,7 +1,7 @@
 import Navbarsignin from "@/app/components/Navbar-signUp"
 import Link from "next/link"
 import Image from "next/image"
-import LogoAuth from "../../../../public/LogoAuth.svg"
+import LogoAuth from "../../../../public/LogoAuth.png"
 import GoogleLoginButton from "../components/GoogleLoginButton"
 import SignupForm from "../components/SignupForm"
 

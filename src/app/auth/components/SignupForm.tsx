@@ -5,8 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-// type تعریف فرم
 export type SignupFormData = {
   firstName: string;
   lastName: string;
@@ -15,7 +15,6 @@ export type SignupFormData = {
   phoneNumber: string;
 };
 
-// ولیدیشن schema
 const schema = yup
   .object({
     firstName: yup.string().required("First name is required"),
@@ -35,6 +34,7 @@ const schema = yup
 
 function SignupForm() {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -45,12 +45,12 @@ function SignupForm() {
     mode: "onBlur",
   });
 
-  // ثبت فرم
   const submitForm: SubmitHandler<SignupFormData> = async (data) => {
     console.log("signup data:", data);
+    setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:1337/api/auth/local/register",
+        "https://my-strapi-project-lm3x.onrender.com/api/auth/local/register",
         {
           username: `${data.firstName} ${data.lastName}`,
           email: data.email,
@@ -80,6 +80,8 @@ function SignupForm() {
       }
 
       toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -93,18 +95,17 @@ function SignupForm() {
         <input
           {...register("firstName")}
           type="text"
-          className="border rounded-md px-3 py-2"
+          className="border border-[var(--color-primary-300)] rounded-md px-3 py-2"
         />
         <p className="text-red-500 text-sm">{errors.firstName?.message}</p>
       </div>
 
-   
       <div className="flex flex-col gap-2">
         <label className="text-sm font-medium">Last name</label>
         <input
           {...register("lastName")}
           type="text"
-          className="border rounded-md px-3 py-2"
+          className="border border-[var(--color-primary-300)] rounded-md px-3 py-2"
         />
         <p className="text-red-500 text-sm">{errors.lastName?.message}</p>
       </div>
@@ -114,15 +115,16 @@ function SignupForm() {
         <input
           {...register("email")}
           type="email"
-          className="border rounded-md px-3 py-2"
+          className="border border-[var(--color-primary-300)] rounded-md px-3 py-2"
         />
         <p className="text-red-500 text-sm">{errors.email?.message}</p>
       </div>
       <button
         type="submit"
-        className="bg-[var(--color-primary)] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+        disabled={isSubmitting}
+        className="bg-[var(--color-primary)] text-white px-4 py-2 rounded-md  transition-colors"
       >
-        Sign Up
+        {isSubmitting ? "Signing Up..." : "Sign Up"}
       </button>
     </form>
   );
