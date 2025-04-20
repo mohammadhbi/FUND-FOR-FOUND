@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import sentp from "../../../../../public/SentP.png";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -15,7 +14,7 @@ function Sent() {
      <>
      <Navbar/>
       <div className="flex flex-col justify-center items-center">
-        <Image src={sentp} alt="" width={267} height={199} />
+        <Image src="https://res.cloudinary.com/dmngeplgl/image/upload/v1745064772/SentP_e9iwbf.png" alt="" width={267} height={199} />
         <p className="text-3xl text-[var(--color-primary)]">
           Your link is being sent.Hang thight!
         </p>

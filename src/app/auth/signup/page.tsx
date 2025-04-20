@@ -1,7 +1,6 @@
 import Navbarsignin from "@/app/components/Navbar-signUp"
 import Link from "next/link"
 import Image from "next/image"
-import LogoAuth from "../../../../public/LogoAuth.png"
 import GoogleLoginButton from "../components/GoogleLoginButton"
 import SignupForm from "../components/SignupForm"
 
@@ -21,7 +20,7 @@ function SignUp() {
 </p>
       </div>
       <p>FUND-FOR-FOUND</p>
-      <Image src={LogoAuth} alt="FUND_FOR" width={109.77} height={100} />
+      <Image src="https://res.cloudinary.com/dmngeplgl/image/upload/v1745064771/LogoAuth_vycv16.png" alt="FUND_FOR" width={109.77} height={100} />
       <GoogleLoginButton/>
       <div className="flex items-center justify-center gap-2 mt-5">
           <div className="h-px w-44 bg-[var(--color-light-4)]"></div>

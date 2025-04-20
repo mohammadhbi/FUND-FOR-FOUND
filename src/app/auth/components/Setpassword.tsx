@@ -1,9 +1,9 @@
 import Image from "next/image"
-import password from "../../../../public/password.png"
+
 function Setpassword() {
   return (
     <div>
-      <Image src={password} alt="Set password"/>
+      <Image src="https://res.cloudinary.com/dmngeplgl/image/upload/v1745064771/password_oljphs.png" alt="Set password"/>
       <p className="text-[var(--color-primary)] text-2xl"> Set your password</p>
       <div>
         <label htmlFor="">

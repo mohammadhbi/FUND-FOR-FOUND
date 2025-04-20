@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import LogoAuth from "../../../../../public/LogoAuth.png";
 import Image from "next/image";
 import { Suspense, useRef, useState } from "react";
 import clsx from "clsx";
@@ -114,7 +113,7 @@ function ConfirmCode() {
 
       <div className="flex flex-col justify-center items-center pt-16">
         <h1 className="text-[var(--color-primary)] text-3xl">FUND FOR FOUND</h1>
-        <Image src={LogoAuth} alt="" width={109.77} height={100} />
+        <Image src="https://res.cloudinary.com/dmngeplgl/image/upload/v1745064771/LogoAuth_vycv16.png" alt="" width={109.77} height={100} />
         <p className="text-[var(--color-primary)] text-3xl">
           Enter confirmation code
         </p>

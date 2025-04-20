@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import Logosignup from "../../../public/Logosignup.png"
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Brand and organization", href: "/explore" },
@@ -25,7 +24,7 @@ export default function NavbarsignUp() {
     {/* Logo */}
     <div className="text-xl font-bold text-foreground ml-4">
       <Link href="/">
-      <Image src={Logosignup} alt=""/>
+      <Image src="https://res.cloudinary.com/dmngeplgl/image/upload/v1745064771/logosignup_pwvd9u.png" alt=""/>
       </Link>
     </div>
 
