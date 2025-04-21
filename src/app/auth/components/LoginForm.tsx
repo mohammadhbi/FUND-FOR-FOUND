@@ -62,7 +62,7 @@ export default function LoginForm() {
         console.error(errorMessage);
       } else if (error instanceof Error) {
         errorMessage = error.message;
-        console.error(errorMessage);
+        
       } else {
         console.error("An unknown error occurred", error);
       }
