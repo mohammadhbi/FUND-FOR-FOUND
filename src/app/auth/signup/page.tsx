@@ -1,36 +1,93 @@
-import Navbarsignin from "@/app/components/Navbar-signUp"
-import Link from "next/link"
-import Image from "next/image"
-import GoogleLoginButton from "../components/GoogleLoginButton"
-import SignupForm from "../components/SignupForm"
+"use client";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import Image from "next/image";
+import LogoAuth from "../../../../public/LogoAuth.png";
 
-function SignUp() {
+const SignUpForm = () => {
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "https://my-strapi-project-lm3x.onrender.com/api/auth/local/register",
+        {
+          username,
+          email,
+          password,
+        }
+      );
+      console.log("User registered:", response.data);
+
+      toast.success("User registered successfully!");
+      router.push("/auth/Login");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Sign up error:", error.response?.data);
+        toast.error(error.response?.data?.message || "Something went wrong!");
+      } else {
+        console.error("An unexpected error occurred:", error);
+        toast.error("An unexpected error occurred.");
+      }
+    }
+  };
+
   return (
-    <div>
-     <Navbarsignin/>
-      <div className="flex flex-col items-center justify-center">
-      <div className="flex justify-between w-full">
-      <Link href="/">
-   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-10  text-[var(--color-primary)]">
-  <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-</svg>
-</Link>
-<p className="left-1/3">
-  Create your personal account
-</p>
-      </div>
-      <p>FUND-FOR-FOUND</p>
-      <Image src="https://res.cloudinary.com/dmngeplgl/image/upload/v1745064771/LogoAuth_vycv16.png" alt="FUND_FOR" width={109.77} height={100} />
-      <GoogleLoginButton/>
-      <div className="flex items-center justify-center gap-2 mt-5">
-          <div className="h-px w-44 bg-[var(--color-light-4)]"></div>
-          <span className="text-[var(--color-light-1)]">or</span>
-          <div className="h-px w-44 bg-[var(--color-light-4)]"></div>
-        </div>
-        <SignupForm/>
-      </div>
-    </div>
-  )
-}
+    <div className="flex flex-col justify-center">
+      <Image src={LogoAuth} alt="" width={109.77} height={100} />
 
-export default SignUp
+      <form onSubmit={handleSignUp} className="w-full max-w-md mx-auto">
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-[var(--color-gray-2)]">
+            Username
+          </label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            className="w-full border rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-[var(--color-gray-2)]">
+            Email
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className="w-full border rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-[var(--color-gray-2)]">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            className="w-full border rounded-md p-2"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-[var(--color-primary)] text-white px-4 py-2 rounded-md w-full"
+        >
+          Sign Up
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default SignUpForm;
