@@ -22,10 +22,10 @@ function HomePage() {
             opportunities
           </p>
           <p className="lg:ml-1.5 text-[var(--color-gray-4)]">
-            By creating your account, you'll gain access to a thriving community
+            By creating your account, you`ll gain access to a thriving community
             where brands and individuals are committed to offering you ongoing
             support. This support network will empower you with the resources,
-            guidance, and connections you need to succeed, ensuring that you're
+            guidance, and connections you need to succeed, ensuring that you`re
             never alone on your journey
           </p>
         </div>
@@ -34,7 +34,7 @@ function HomePage() {
           <p className="text-[var(--color-primary)] text-3xl pt-10">Brand or organization</p>
          <div className="ml-4.5 pt-2.5">
          <p className="text-start text-[var(--color-gray-4)] text-m">
-            If your brand is established and you're looking for continuos
+            If your brand is established and you`re looking for continuos
             support, get start now.
           </p>
          </div>
