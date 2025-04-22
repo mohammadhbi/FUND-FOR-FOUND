@@ -4,6 +4,7 @@ import Image from "next/image";
 import Bag from "../../public/Bag.png";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Footer from "./auth/components/Footer";
 function HomePage() {
   const [isLoggedIn, setIsLoggedIn]=useState(false);
   useEffect(()=>{
@@ -52,6 +53,7 @@ function HomePage() {
         
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

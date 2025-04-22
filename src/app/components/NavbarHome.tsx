@@ -49,7 +49,7 @@ export default function NavbarHome() {
   };
   return (
     <div className="">
-      <nav className="fixed w-full top-0 bg-background/70 backdrop-blur-lg h-16 px-4 z-50 border-b border-[var(--color-primary-100)]">
+      <nav className="w-full top-0 bg-background/70 backdrop-blur-lg h-16 px-4 z-50 border-b border-[var(--color-primary-100)]">
         <div className="container mx-auto flex items-center justify-between h-full relative">
           <div className="ml-4">
             <Link href="/">
