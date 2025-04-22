@@ -46,7 +46,11 @@ export default function LoginForm() {
       const response = await axios.post("https://my-strapi-project-lm3x.onrender.com/api/auth/local", user);
       localStorage.setItem("token", response.data.jwt);
       console.log("called", response.data.user.username);
-
+      const username = response.data.user.username;
+      const firstLetter = username.charAt(0).toUpperCase();
+      localStorage.setItem('token', response.data.jwt);
+      localStorage.setItem('username', username);
+      localStorage.setItem('firstLetter', firstLetter);
       toast.success("User logged in successfully");
       router.push("/");
     } catch (error: unknown) {
