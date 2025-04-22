@@ -22,7 +22,7 @@ function HomePage() {
             opportunities
           </p>
           <p className="lg:ml-1.5 text-[var(--color-gray-4)]">
-            By creating your account, you`ll gain access to a thriving community
+            By creating your account, youll gain access to a thriving community
             where brands and individuals are committed to offering you ongoing
             support. This support network will empower you with the resources,
             guidance, and connections you need to succeed, ensuring that you`re
