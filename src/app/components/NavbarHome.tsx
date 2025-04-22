@@ -48,7 +48,7 @@ export default function NavbarHome() {
     setFirstLetter(null);
   };
   return (
-    <div className="ml-3.5">
+    <div className="">
       <nav className="fixed w-full top-0 bg-background/70 backdrop-blur-lg h-16 px-4 z-50 border-b border-[var(--color-primary-100)]">
         <div className="container mx-auto flex items-center justify-between h-full relative">
           <div className="ml-4">
@@ -57,7 +57,7 @@ export default function NavbarHome() {
             </Link>
           </div>
 
-          <ul className="hidden lg:flex gap-5 items-center text-sm text-gray-3 absolute left-1/2 -translate-x-1/2">
+          <ul className="hidden lg:flex gap-5 items-center text-sm text-gray-3 absolute left-1/3 -translate-x-1/2">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
