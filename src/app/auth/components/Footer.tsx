@@ -305,7 +305,7 @@ function Footer() {
           </div>
         </div>
 
-        {/* بخش پایین مشترک برای دسکتاپ */}
+        
         <div className="md:flex md:items-center md:justify-between sm:flex sm:items-center sm:gap-y-4 hidden">
           <button className="p-2.5">
             <p>English (100%)</p>

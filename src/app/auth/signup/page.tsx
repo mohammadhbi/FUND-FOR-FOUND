@@ -33,7 +33,8 @@ const SignUpForm = () => {
     localStorage.setItem('username',username);
     localStorage.setItem('firstLetter',firstletter);
     localStorage.setItem('token',response.data.jwt);
-      console.log("User registered:", response.data);
+    console.log("Signup response:", response.data);
+      
       toast.success("User registered successfully!");
       router.push("/auth/signup/welcome");
     } catch (error) {
