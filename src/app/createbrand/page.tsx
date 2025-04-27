@@ -21,6 +21,7 @@
 import { useState } from "react";
 import Stepper from "../components/Stepper";
 import NextButtonStep from "../components/NextButtonStep";
+import CreateBrandForm from "../components/CreateBrandForm";
 
 export default function Page() {
   const [step, setStep] = useState(1);
@@ -33,9 +34,9 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4 min-h-screen justify-center">
+    <div className="flex flex-col items-center space-y-4 min-h-screen">
       <Stepper step={step} lengthSteps={lengthSteps} />
-      <h1 className="text-2xl font-bold">Hello</h1>
+      <CreateBrandForm/>
       <NextButtonStep
         onClick={handleNext}
         disabled={step === lengthSteps}
