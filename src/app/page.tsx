@@ -6,13 +6,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "./auth/components/Footer";
 function HomePage() {
-  const [isLoggedIn, setIsLoggedIn]=useState(false);
-  useEffect(()=>{
-    const token = localStorage.getItem('token');
-    if (token){
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
       setIsLoggedIn(true);
     }
-  },[]);
+  }, []);
   return (
     <div>
       <NavbarHome />
@@ -31,29 +31,34 @@ function HomePage() {
           </p>
         </div>
         <div className="mt-4 w-80 h-96 border border-[var(--color-primary)] rounded-3xl flex flex-col  items-center">
-          <Image className="mt-14" src={Bag} width={77} height={60} alt="Start now" />
-          <p className="text-[var(--color-primary)] text-3xl pt-10">Brand or organization</p>
-         <div className="ml-4.5 pt-2.5">
-         <p className="text-start text-[var(--color-gray-4)] text-m">
-            If your brand is established and you`re looking for continuos
-            support, get start now.
+          <Image
+            className="mt-14"
+            src={Bag}
+            width={77}
+            height={60}
+            alt="Start now"
+          />
+          <p className="text-[var(--color-primary)] text-3xl pt-10">
+            Brand or organization
           </p>
-         </div>
-         
-          <span className="bg-[var(--color-primary)] text-white py-2.5 rounded min-w-64 text-center mt-2.5">
-          <Link href={isLoggedIn ? '/createbrand': '/auth/signup'}>
-          Start
+          <div className="ml-4.5 pt-2.5">
+            <p className="text-start text-[var(--color-gray-4)] text-m">
+              If your brand is established and you`re looking for continuos
+              support, get start now.
+            </p>
+          </div>
+          <Link href={isLoggedIn ? "/createbrand" : "/auth/signup"}>
+            <p className="bg-[var(--color-primary)] text-white py-2.5 rounded min-w-72 text-center mt-2.5">
+              Start
+            </p>
           </Link>
-          </span>
+
           <span className="text-[var(--color-primary)]  pb-2.5 pt-2.5 mb-3 rounded min-w-64 text-center mt-2.5">
-          <Link href="/learnmore">
-          learn more
-          </Link>
+            <Link href="/learnmore">learn more</Link>
           </span>
-        
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

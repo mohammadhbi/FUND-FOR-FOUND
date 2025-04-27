@@ -40,13 +40,13 @@ export default function NavbarHome() {
       }
     }
   }, []);
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('firstLetter');
-    localStorage.removeItem('username');
-    setIsLoggedIn(false);
-    setFirstLetter(null);
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem('token');
+  //   localStorage.removeItem('firstLetter');
+  //   localStorage.removeItem('username');
+  //   setIsLoggedIn(false);
+  //   setFirstLetter(null);
+  // };
   return (
     <div className="">
       <nav className="w-full top-0 bg-background/70 backdrop-blur-lg h-16 px-4 z-50 border-b border-[var(--color-primary-100)]">
@@ -92,7 +92,7 @@ export default function NavbarHome() {
 
             {isLoggedIn ? (
               <button
-                onClick={handleLogout}
+                // onClick={handleLogout}
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-gray-700 font-medium text-sm"
                 aria-label="Logout"
               >

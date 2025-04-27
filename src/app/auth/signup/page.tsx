@@ -143,7 +143,7 @@ const SignUpForm = () => {
             className="w-full border border-gray-300 rounded-md p-2 outline-none focus:border-[var(--color-primary)]"
           />
           <div className="flex justify-between items-center">
-            <p></p>
+            <p className="text-[var(--color-primary)]"><Link href="/auth/Login">already have an account?</Link></p>
             <span
               onClick={() => setIsshowPassword(!isshowPassword)}
               className="h-6 w-6 text-current cursor-pointer"
