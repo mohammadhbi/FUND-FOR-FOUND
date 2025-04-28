@@ -1,198 +1,259 @@
-// import React from "react";
-
-// export default function CreateBrandForm() {
-//   return (
-//     <div className="border border-amber-600 flex flex-col">
-//       <p className="text-bold text-[var(--color-primary)]">Basic info</p>
-//       <p>Tell about your Brand/organization</p>
-//       <p>
-//         Provide an over view of the brand or organization you want to register
-//         on3F.
-//       </p>
-//       <div className="border border-amber-600  flex">
-//         <div className="border border-amber-600 ">
-//           <label htmlFor="input">Brand/organization</label>
-//           <input type="text" className="border border-amber-600 " />
-//         </div>
-//         <div className="border border-amber-600 ">
-//           <label htmlFor="input">Country</label>
-//           <input type="text" className="border border-amber-600" />
-//         </div>
-//         <p>
-//           Select the primary category that best describes your brand or
-//           organization.Then select the subcategory that further defines your
-//           brand or organization
-//         </p>
-//         <div className="border border-amber-600 p-3">
-//           <div className="border border-amber-600 p-3">
-//             <label htmlFor="input">Brand/organization</label>
-//             <input type="text" className="border border-amber-600 p-3" />
-//           </div>
-//           <div className="border border-amber-600 p-3">
-//             <label htmlFor="input">Brand/organization</label>
-//             <input type="text" className="border border-amber-600 p-3" />
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import NextButtonStep from "./NextButtonStep";
+import axios from "axios";
+
+type FormValues = {
+  Brandname: string;
+  category: string;
+  Subcategory: string;
+  tags: string[];
+  agree: boolean;
+  Country: string;
+};
 
 export default function CreateBrandForm() {
-  const [brandName, setBrandName] = useState("");
-  const [country, setCountry] = useState("");
-  const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
-  const [agree, setAgree] = useState(false);
+  const { register, handleSubmit, watch, setValue } = useForm<FormValues>({
+    defaultValues: {
+      Brandname: "",
+      Country: "",
+      category: "",
+      Subcategory: "",
+      tags: [] as string[],
+      agree: false,
+    },
+  });
 
-  // تابع برای مدیریت اضافه کردن تگ‌ها
+  const [tagInput, setTagInput] = useState("");
+  const [step, setStep] = useState(1);
+  const stepsLength = 3;
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const tags = watch("tags");
+  const agree = watch("agree");
+
+  const onSubmit = async (data: FormValues) => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      const payload = { data };
+      const response = await axios.post(
+        "https://my-strapi-project-lm3x.onrender.com/api/brand-forms",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Form submitted successfully:", response.data);
+
+      if (step < stepsLength) {
+        setStep(step + 1);
+      }
+    } catch (error: any) {
+      console.error("Error submitting brand form:", error);
+      if (error.response) {
+        setErrorMessage(
+          error.response.data?.error?.message ||
+            "Failed to submit the form. Please try again."
+        );
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
-      setTags([...tags, tagInput.trim()]);
+      e.preventDefault();
+      setValue("tags", [...tags, tagInput.trim()]);
       setTagInput("");
     }
   };
 
-  // تابع برای حذف تگ
   const removeTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
+    const newTags = [...tags];
+    newTags.splice(index, 1);
+    setValue("tags", newTags);
   };
+
+  const isFormValid =
+    watch("Brandname") &&
+    watch("Country") &&
+    watch("category") &&
+    watch("Subcategory") &&
+    agree;
+
+  const isButtonDisabled = !isFormValid || step === stepsLength || isLoading;
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h2 className="text-2xl font-bold text-[var(--color-primary)]">
-        Basic info
-      </h2>
-      <h3 className="text-xl font-semibold mt-2">
-        Tell about your Brand/organization
-      </h3>
-      <p className="text-gray-600 mt-1">
-        Provide an overview of the brand or organization you want to register on
-        3F.
-      </p>
-
-      {/* فیلد Brand/organization name و Country */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Brand/organization name <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={brandName}
-            onChange={(e) => setBrandName(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
-            placeholder="time Brand et olganikation"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Country <span className="text-red-500">*</span>
-          </label>
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
+      {/* Stepper */}
+      <div className="flex items-center justify-center mb-8 gap-4">
+        {[1, 2, 3].map((s) => (
+          <div
+            key={s}
+            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 
+            ${
+              step === s
+                ? "bg-purple-600 text-white border-purple-600"
+                : "border-gray-300 text-gray-500"
+            }`}
           >
-            <option value="" disabled>
-              time Brend et olganikation
-            </option>
-            <option value="Ban dourtimns">Ban dourtimns</option>
-            <option value="Bantinus">Bantinus</option>
-          </select>
-        </div>
+            {s}
+          </div>
+        ))}
       </div>
 
-      {/* توضیحات Category و Subcategory */}
-      <p className="text-gray-600 mt-4">
-        Select the primary category that best describes your brand or
-        organization. Then select the subcategory that further defines your brand
-        or organization.
-      </p>
+      {step === 1 && (
+        <>
+          <h2 className="text-2xl font-bold text-[var(--color-primary)]">
+            Basic info
+          </h2>
+          <h3 className="text-xl font-semibold mt-2">
+            Tell about your Brand/organization
+          </h3>
+          <p className="text-gray-600 mt-1">
+            Provide an overview of the brand or organization you want to
+            register on 3F.
+          </p>
 
-      {/* فیلد Category و Subcategory */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Category <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
-            placeholder="Pathngeen"
-          />
+          {errorMessage && (
+            <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
+              {errorMessage}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Brand/organization name{" "}
+                  <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  {...register("Brandname", { required: true })}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
+                  placeholder="Brand name"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Country <span className="text-red-500">*</span>
+                </label>
+                <select
+                  {...register("Country", { required: true })}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
+                >
+                  <option value="" disabled>
+                    choose your country
+                  </option>
+                  <option value="Iran">Iran</option>
+                  <option value="USA">USA</option>
+                  <option value="UAE">UAE</option>
+                  <option value="UK">UK</option>
+                </select>
+              </div>
+            </div>
+
+            <p className="text-gray-600 mt-4">
+              Select the primary category that best describes your brand or
+              organization. Then select the subcategory that further defines
+              your brand or organization.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Category <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  {...register("category", { required: true })}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
+                  placeholder="Category"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Subcategory <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  {...register("Subcategory", { required: true })}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
+                  placeholder="Subcategory"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Brand tags <span className="text-gray-500">(optional)</span>
+              </label>
+              <div className="mt-1 flex flex-wrap gap-2 p-2 border border-gray-300 rounded-md">
+                {tags.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="bg-gray-800 text-white px-2 py-1 rounded-md flex items-center"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(index)}
+                      className="ml-2 text-gray-400 hover:text-white"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagInput}
+                  className="flex-1 border-none outline-none p-1"
+                  placeholder="By typing # make your own tag"
+                />
+              </div>
+            </div>
+
+            <div className="mt-6 flex items-center">
+              <input
+                type="checkbox"
+                {...register("agree", { required: true })}
+                className="h-4 w-4 text-[var(--color-primary)] border-gray-300 rounded"
+              />
+              <label className="ml-2 text-sm text-gray-700">
+                I agree with the terms of service of 3F.
+              </label>
+            </div>
+
+            <div className="mt-4">
+              <NextButtonStep
+                onClick={handleSubmit(onSubmit)}
+                disabled={isButtonDisabled}
+              />
+            </div>
+          </form>
+        </>
+      )}
+
+      {step === 2 && (
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="text-3xl font-bold text-purple-600">Detail info</h1>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Subcategory <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]"
-            placeholder="Pathngeen"
-          />
-        </div>
-      </div>
-
-      {/* فیلد Brand tags */}
-      <div className="mt-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Brand tags <span className="text-gray-500">(optional)</span>
-        </label>
-        <div className="mt-1 flex flex-wrap gap-2 p-2 border border-gray-300 rounded-md">
-          {tags.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-gray-800 text-white px-2 py-1 rounded-md flex items-center"
-            >
-              {tag}
-              <button
-                onClick={() => removeTag(index)}
-                className="ml-2 text-gray-400 hover:text-white"
-              >
-                ×
-              </button>
-            </span>
-          ))}
-          <input
-            type="text"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleTagInput}
-            className="flex-1 border-none outline-none p-1"
-            placeholder="by typing # make your own tag"
-          />
-        </div>
-      </div>
-
-      {/* چک‌باکس و دکمه Continue */}
-      <div className="mt-6 flex items-center">
-        <input
-          type="checkbox"
-          checked={agree}
-          onChange={(e) => setAgree(e.target.checked)}
-          className="h-4 w-4 text-[var(--color-primary)] border-gray-300 rounded"
-        />
-        <label className="ml-2 text-sm text-gray-700">
-          I agree with the terms of service of 3F.
-        </label>
-      </div>
-
-      <button
-        disabled={!agree}
-        className="mt-4 bg-[var(--color-primary)] text-white px-6 py-2 rounded-md hover:bg-opacity-80 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-      >
-        Continue
-      </button>
+      )}
     </div>
   );
 }
