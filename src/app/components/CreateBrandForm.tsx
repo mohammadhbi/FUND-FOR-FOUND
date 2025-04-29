@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import NextButtonStep from "./NextButtonStep";
+import NextButtonStep from "../createbrand/components/NextButtonStep";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   Brandname: string;
@@ -31,7 +32,7 @@ export default function CreateBrandForm() {
   const stepsLength = 3;
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   const tags = watch("tags");
   const agree = watch("agree");
 
@@ -55,16 +56,17 @@ export default function CreateBrandForm() {
       if (step < stepsLength) {
         setStep(step + 1);
       }
-    } catch (error: any) {
+      router.push("/IntroBrand")
+    } catch (error) {
       console.error("Error submitting brand form:", error);
-      if (error.response) {
-        setErrorMessage(
-          error.response.data?.error?.message ||
-            "Failed to submit the form. Please try again."
-        );
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
+      // if (error.response) {
+      //   setErrorMessage(
+      //     error.response.data?.error?.message ||
+      //       "Failed to submit the form. Please try again."
+      //   );
+      // } else {
+      //   setErrorMessage("An unexpected error occurred. Please try again.");
+      // }
     } finally {
       setIsLoading(false);
     }
@@ -95,24 +97,7 @@ export default function CreateBrandForm() {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      {/* Stepper */}
-      <div className="flex items-center justify-center mb-8 gap-4">
-        {[1, 2, 3].map((s) => (
-          <div
-            key={s}
-            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 
-            ${
-              step === s
-                ? "bg-purple-600 text-white border-purple-600"
-                : "border-gray-300 text-gray-500"
-            }`}
-          >
-            {s}
-          </div>
-        ))}
-      </div>
-
-      {step === 1 && (
+      <div className=" mb-8 gap-4">
         <>
           <h2 className="text-2xl font-bold text-[var(--color-primary)]">
             Basic info
@@ -247,13 +232,7 @@ export default function CreateBrandForm() {
             </div>
           </form>
         </>
-      )}
-
-      {step === 2 && (
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-3xl font-bold text-purple-600">Detail info</h1>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
