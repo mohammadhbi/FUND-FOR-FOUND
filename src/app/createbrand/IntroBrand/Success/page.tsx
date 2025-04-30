@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import Congratulation from '../../../../../public/congargulation.png'
+import Congratulation from '../../../../../public/Congratulation.png'
 import Link from 'next/link'
 export default function page() {
   return (

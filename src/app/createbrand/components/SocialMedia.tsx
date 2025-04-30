@@ -126,16 +126,18 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
   };
 
   const handleSubmit = async () => {
-    const payload = {
-      data: links.map((link) => ({
-        socials: link.type.value,
-        url: link.url?.trim() || "", // ارسال رشته خالی اگر null بود
-      })),
-    };
-  
-    console.log("Sending payload:", payload);
-  
     try {
+      const payload = {
+        data: {
+          socialLink: links.map((link) => ({
+            type: link.type.value,
+            url: link.url?.trim() || "",
+          })),
+        },
+      };
+  
+      console.log("Sending payload:", payload);
+  
       const res = await axios.post(
         "https://my-strapi-project-lm3x.onrender.com/api/social-links",
         payload
@@ -143,13 +145,14 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
   
       if (res.status === 200 || res.status === 201) {
         toast.success("Success!");
-        router.push("/thank");
+        router.push("/createbrand/IntroBrand/Success");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error submitting social links: ", error.response?.data || error);
       toast.error("Error submitting data!");
     }
   };
+  
   
 
   useEffect(() => {
