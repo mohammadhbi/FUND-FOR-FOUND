@@ -1,4 +1,5 @@
-
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import {
   FaGlobe,
@@ -14,6 +15,7 @@ import {
   FaChevronDown,
   FaChevronUp,
 } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const SOCIALS = [
   {
@@ -88,7 +90,7 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
   ]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const dropdownRefs = useRef<Array<HTMLDivElement | null>>([]);
-
+  const router = useRouter();
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (
@@ -123,19 +125,45 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
     setLinks([...links, { type: SOCIALS[0], url: "" }]);
   };
 
+  const handleSubmit = async () => {
+    const payload = {
+      data: links.map((link) => ({
+        socials: link.type.value,
+        url: link.url?.trim() || "", // ارسال رشته خالی اگر null بود
+      })),
+    };
+  
+    console.log("Sending payload:", payload);
+  
+    try {
+      const res = await axios.post(
+        "https://my-strapi-project-lm3x.onrender.com/api/social-links",
+        payload
+      );
+  
+      if (res.status === 200 || res.status === 201) {
+        toast.success("Success!");
+        router.push("/thank");
+      }
+    } catch (error: any) {
+      console.error("Error submitting social links: ", error.response?.data || error);
+      toast.error("Error submitting data!");
+    }
+  };
+  
+
   useEffect(() => {
     if (onChange) {
       onChange(links);
     }
   }, [links]);
-return (
+  return (
     <div className="w-full max-w-[200px] lg:max-w-2xl mx-auto flex flex-col gap-4 mt-8">
       {links.map((item, idx) => (
         <div
           key={idx}
           className="relative flex flex-col w-full gap-0 mb-6 lg:flex-row lg:items-center lg:gap-2 lg:mb-0"
         >
-          {/* Custom Dropdown */}
           <div className="w-full mb-2 lg:w-40 lg:mb-0">
             <button
               type="button"
@@ -174,7 +202,7 @@ return (
             onChange={(e) => handleUrlChange(idx, e.target.value)}
             type="url"
           />
-          {/* Remove button */}
+
           <button
             className="absolute top-16 -right-7 text-gray-400 cursor-pointer hover:text-red-500 transition-colors lg:static lg:ml-2"
             onClick={() => handleRemove(idx)}
@@ -191,6 +219,12 @@ return (
         onClick={handleAdd}
       >
         + Add social link
+      </button>
+      <button
+        onClick={handleSubmit}
+        className="mt-2 w-full self-center px-6 py-2 rounded-md border border-purple-500 bg-purple-600 text-white hover:bg-purple-700 transition lg:w-fit"
+      >
+        Send
       </button>
     </div>
   );

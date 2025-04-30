@@ -12,6 +12,8 @@ const EditorComponent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 const [isSaved,setIsSaved]=useState(false);
+
+
   useEffect(() => {
     if (!editorRef.current) {
       editorRef.current = new EditorJS({
@@ -110,10 +112,11 @@ const [isSaved,setIsSaved]=useState(false);
       } catch (err) {
         console.error(err);
         toast.error("An error occurred while saving data");
-        setError(err);
-        if (axios.isAxiosError(error)) {
-          console.error("Server said:", error.response?.data);
-        }
+        // setError(err);
+        // if (axios.isAxiosError(error)) {
+        //   console.error("Server said:", error.response?.data);
+        // }
+        console.log(editorData,error);
       } finally {
         setLoading(false);
       }
