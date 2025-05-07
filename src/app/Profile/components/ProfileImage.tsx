@@ -3,12 +3,13 @@
 import Image from "next/image";
 import defaultProfile from "../../../../public/defaultProfile.png";
 import { useCallback, useRef, useState, useEffect } from "react";
+import ProfileAvatar from "./profileAvatar";
 
 export default function ProfileImage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const title = "Korush"
+  const title = "Korush";
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -59,16 +60,7 @@ export default function ProfileImage() {
           0.00 $ Total count
         </p>
         <div className="absolute bottom-[-30px] left-6 z-10 flex flex-col items-center translate-y-1/2 text-white">
-        <div className="relative px-2.5 py-1 bg-[var(--color-primary)] rounded flex items-center justify-center">
-  <span className="opacity-25 text-4xl">{title.slice(0,1)}</span>
-
-  <button
-    className="absolute  
-               text-xs bg-[var(--color-primary-100)] opacity-80 text-white rounded px-1 py-0.5"
-  >
-    Edit
-  </button>
-</div>
+          <ProfileAvatar/>
 
           <p className="text-xs mt-1 text-black">{title}</p>
         </div>

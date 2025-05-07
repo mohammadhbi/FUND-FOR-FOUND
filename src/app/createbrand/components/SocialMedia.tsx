@@ -91,6 +91,8 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const dropdownRefs = useRef<Array<HTMLDivElement | null>>([]);
   const router = useRouter();
+  const ensureHttp = (url: string) =>
+    url.startsWith("https://") ? url : "https://" + url;
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (
@@ -126,34 +128,48 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
   };
 
   const handleSubmit = async () => {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      toast.error("User not authenticated");
+      return;
+    }
+
     try {
-      const payload = {
-        data: {
-          socialLink: links.map((link) => ({
-            type: link.type.value,
-            url: link.url?.trim() || "",
-          })),
-        },
-      };
-  
-      console.log("Sending payload:", payload);
-  
-      const res = await axios.post(
-        "https://my-strapi-project-lm3x.onrender.com/api/social-links",
-        payload
-      );
-  
-      if (res.status === 200 || res.status === 201) {
-        toast.success("Success!");
-        router.push("/createbrand/IntroBrand/Success");
+      const validLinks = links.filter((link) => link.url?.trim());
+
+      for (const link of validLinks) {
+        const payload = {
+          data: {
+            socials: link.type.value, 
+            url: ensureHttp(link.url.trim()),
+            users_permissions_user: Number(userId), 
+          },
+        };
+
+        console.log(
+          "📤 Sending payload to Strapi:",
+          JSON.stringify(payload, null, 2)
+        );
+
+        const response = await axios.post(
+          "https://my-strapi-project-lm3x.onrender.com/api/social-links",
+          payload
+        );
+
+        console.log("✅ Success:", response.data);
       }
+
+      toast.success("Social links submitted!");
+      router.push("/createbrand/IntroBrand/Success");
     } catch (error) {
-      console.error("Error submitting social links: ", error.response?.data || error);
-      toast.error("Error submitting data!");
+      console.error(
+        "❌ Error submitting social links:",
+        error.response?.data || error
+      );
+      toast.error("Failed to submit social links");
     }
   };
-  
-  
 
   useEffect(() => {
     if (onChange) {

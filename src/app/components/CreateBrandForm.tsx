@@ -56,7 +56,7 @@ export default function CreateBrandForm() {
       if (step < stepsLength) {
         setStep(step + 1);
       }
-      router.push("/IntroBrand")
+      router.push("/createbrand/IntroBrand")
     } catch (error) {
       console.error("Error submitting brand form:", error);
       // if (error.response) {
