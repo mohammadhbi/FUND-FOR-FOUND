@@ -3,7 +3,7 @@
 import Image from "next/image";
 import defaultProfile from "../../../../public/defaultProfile.png";
 import { useCallback, useRef, useState, useEffect } from "react";
-import ProfileAvatar from "./profileAvatar";
+import ProfileAvatar from "../components/ProfileAvatar";
 
 export default function ProfileImage() {
   const inputRef = useRef<HTMLInputElement>(null);
