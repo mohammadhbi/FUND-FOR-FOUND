@@ -1,142 +1,118 @@
+// "use client";
+
 // import { useEffect, useState } from "react";
 // import axios from "axios";
-// import Link from "next/link";
 
-// interface SocialLink {
-//   type: string;
+// type Brand = {
+//   id: number;
 //   url: string;
-// }
+// };
 
-// interface RawSocialLink {
-//   id : number;
-//   type : string;
-//   url : string;
-//   key? : string;
-// }
-
-// export default function SocialMediaList() {
-//   const [socials, setSocials] = useState<SocialLink[]>([]);
+// export default function Get() {
+//   const [brands, setBrands] = useState<Brand[]>([]);
 //   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
 
 //   useEffect(() => {
-//     const userId = localStorage.getItem("userId");
-
-//     if (!userId) {
-//       console.error("User not found in localStorage");
-//       return;
-//     }
-
-//     const fetchSocialLinks = async () => {
+//     const fetchBrands = async () => {
 //       try {
-//         // const res = await axios.get(
-//         //   `https://my-strapi-project-lm3x.onrender.com/api/social-links?filters[user][id][$eq]=${userId}`
-//         // );
-//         const res = await axios.get(
-//           "https://my-strapi-project-lm3x.onrender.com/api/social-links?populate=*"
+//         const response = await axios.get(
+//           "https://my-strapi-project-lm3x.onrender.com/api/social-links"
 //         );
-//         console.log("Raw API response:", res.data);
-//         console.log("Data array:", res.data.data);
+//         const brandData = response.data?.data.map((item: any) => ({
+//           id: item.id,
+//           url: item.url,
 
-//         const rawData : RawSocialLink[] = res.data
-//         // const links = res.data.data.map((item: any) => ({
-//         //   type: item.attributes.type,
-//         //   url: item.attributes.url,
-//         // }));
-//         const links = res.data.data.map((item: any) => ({
-//           type: item.type || "Unknown",
-//           url: item.url || "#",
 //         }));
-
-//         setSocials(links);
-//       } catch (error) {
-//         console.error("Error fetching social links:", error);
+//         setBrands(brandData);
+//       } catch (err) {
+//         setError("Failed to fetch brand URLs.");
+//         console.error(err);
 //       } finally {
 //         setLoading(false);
 //       }
 //     };
 
-//     fetchSocialLinks();
+//     fetchBrands();
 //   }, []);
 
-//   if (loading) return <p>Loading social links...</p>;
+//   if (loading) return <p>Loading...</p>;
+//   if (error) return <p className="text-red-500">{error}</p>;
 
 //   return (
-//     <div className="flex flex-wrap gap-4">
-//       {socials.map((link, index) => (
-//         <Link
-//           key={index}
-//           href={link.url}
-//           className="text-blue-600 hover:underline"
-//         >
-//           {link.type}
-//         </Link>
-//       ))}
+//     <div className="space-y-2">
+//       <h2 className="text-lg font-semibold">Brand URLs:</h2>
+//       {brands.length === 0 ? (
+//         <p>No brands found.</p>
+//       ) : (
+//         <ul className="list-disc pl-5">
+//           {brands.map((brand) => (
+//             <li key={brand.id}>
+//               <a
+//                 href={brand.url}
+//                 target="_blank"
+//                 rel="noopener noreferrer"
+//                 className="text-blue-600 hover:underline"
+//               >
+//                 {brand.url}
+//               </a>
+//             </li>
+//           ))}
+//         </ul>
+//       )}
 //     </div>
 //   );
 // }
+"use client";
+
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 
-// مدل نهایی که توی کامپوننت استفاده می‌کنی
-interface SocialLink {
+type SocialLink = {
   id: number;
-  type: string;
   url: string;
-}
+};
 
-// مدل کامل برگشتی از API
-interface RawSocialLink {
-  id: number;
-  attributes: {
-    type: string;
-    url: string;
-    user: {
-      data: {
-        id: number;
-      } | null;
-    };
-  };
-}
-
-export default function SocialMediaList() {
-  const [socials, setSocials] = useState<SocialLink[]>([]);
+export default function Get() {
+  const [links, setLinks] = useState<SocialLink[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-
-    if (!userId) {
-      console.error("User not found in localStorage");
-      setLoading(false);
-      return;
-    }
-
     const fetchSocialLinks = async () => {
       try {
-        const res = await axios.get(
-          "https://my-strapi-project-lm3x.onrender.com/api/social-links"
+        const token = localStorage.getItem("token"); // یا از context/session بگیر اگه داری
+
+        if (!token) {
+          setError("User not authenticated.");
+          return;
+        }
+
+        const response = await axios.get(
+          "https://my-strapi-project-lm3x.onrender.com/api/social-links?populate=user",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-console.log(res.data);
-        const rawData: RawSocialLink[] = res.data.data;
-console.log(rawData);
 
-        const links: SocialLink[] = rawData
-          .filter(
-            (item) =>
-              item.attributes.user?.data?.id?.toString() === userId &&
-              typeof item.attributes.type === "string" &&
-              typeof item.attributes.url === "string"
-          )
-          .map((item) => ({
-            id: item.id,
-            type: item.attributes.type,
-            url: item.attributes.url,
-          }));
+        const allLinks = response.data?.data;
 
-        setSocials(links);
-      } catch (error) {
-        console.error("Error fetching social links:", error);
+        // فقط لینک‌هایی که یوزرش موجوده (یعنی متعلق به همین کاربره)
+        const userLinks = allLinks.filter(
+          (item: any) => item.attributes?.user?.data
+        );
+
+        const parsed = userLinks.map((item: any) => ({
+          id: item.id,
+          url: item.attributes.url,
+        }));
+
+        setLinks(parsed);
+      } catch (err) {
+        setError("Failed to fetch social links.");
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -145,15 +121,30 @@ console.log(rawData);
     fetchSocialLinks();
   }, []);
 
-  if (loading) return <p>Loading social links...</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {socials.map((link) => (
-        <Link key={link.id} href={link.url} className="text-blue-600 hover:underline">
-          {link.type}
-        </Link>
-      ))}
+    <div className="space-y-2">
+      <h2 className="text-lg font-semibold">Your Social Links</h2>
+      {links.length === 0 ? (
+        <p>You haven’t added any links yet.</p>
+      ) : (
+        <ul className="list-disc pl-5">
+          {links.map((link) => (
+            <li key={link.id}>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {link.url}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
