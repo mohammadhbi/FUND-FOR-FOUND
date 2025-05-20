@@ -2,7 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { User as NextAuthUser } from 'next-auth';
 
-// تنظیمات NextAuth
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({

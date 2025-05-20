@@ -67,6 +67,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { client } from "@/lib/axios";
 
 type SocialLink = {
   id: number;
@@ -88,8 +89,8 @@ export default function Get() {
           return;
         }
 
-        const response = await axios.get(
-          "https://my-strapi-project-lm3x.onrender.com/api/social-links?populate=user",
+        const response = await client.get(
+          "/social-links?populate=user",
           {
             headers: {
               Authorization: `Bearer ${token}`,

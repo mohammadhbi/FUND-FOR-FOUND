@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import NextButtonStep from "../createbrand/components/NextButtonStep";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import { client } from "@/lib/axios";
 
 type FormValues = {
   Brandname: string;
@@ -41,8 +41,8 @@ export default function CreateBrandForm() {
     setErrorMessage(null);
     try {
       const payload = { data };
-      const response = await axios.post(
-        "https://my-strapi-project-lm3x.onrender.com/api/brand-forms",
+      const response = await client.post(
+        "/brand-forms",
         payload,
         {
           headers: {

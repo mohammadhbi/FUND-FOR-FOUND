@@ -11,6 +11,7 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 import { EyeSlashIcon } from "@heroicons/react/16/solid";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import NavbarsignUp from "@/app/components/Navbar-signUp";
+import { client } from "@/lib/axios";
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -21,8 +22,8 @@ const SignUpForm = () => {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://my-strapi-project-lm3x.onrender.com/api/auth/local/register",
+      const response = await client.post(
+        "/auth/local/register",
         {
           username,
           email,
@@ -33,7 +34,7 @@ const SignUpForm = () => {
       const user = response.data.user;
       const firstLetter = username.charAt(0).toUpperCase();
 
-      // ✅ ذخیره در localStorage
+      
       localStorage.setItem("username", user.username);
       localStorage.setItem("firstLetter", firstLetter);
       localStorage.setItem("token", response.data.jwt);

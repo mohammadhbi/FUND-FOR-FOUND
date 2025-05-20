@@ -1,3 +1,4 @@
+import { client } from "@/lib/axios";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
@@ -152,8 +153,8 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
           JSON.stringify(payload, null, 2)
         );
 
-        const response = await axios.post(
-          "https://my-strapi-project-lm3x.onrender.com/api/social-links",
+        const response = await client.post(
+          "/social-links",
           payload
         );
 

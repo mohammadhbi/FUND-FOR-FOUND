@@ -4,7 +4,7 @@ import EditorJS from "@editorjs/editorjs";
 import Paragraph from "@editorjs/paragraph";
 import List from "@editorjs/list";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { client } from "@/lib/axios";
 
 const EditorComponent = () => {
   const editorRef = useRef<EditorJS | null>(null);
@@ -95,8 +95,8 @@ const [isSaved,setIsSaved]=useState(false);
         setEditorData(savedData);
         console.log("saved data", savedData);
 
-        const response = await axios.post(
-          "https://my-strapi-project-lm3x.onrender.com/api/editor-contents",
+        const response = await client.post(
+          "/editor-contents",
           { data: {
             Title: "Brand story",
             content: savedData
