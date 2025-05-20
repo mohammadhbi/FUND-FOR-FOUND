@@ -1,5 +1,5 @@
+"use client";
 import { client } from "@/lib/axios";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import {
@@ -166,7 +166,8 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
     } catch (error) {
       console.error(
         "❌ Error submitting social links:",
-        error.response?.data || error
+        // error.response?.data || error
+        console.log(error)
       );
       toast.error("Failed to submit social links");
     }
