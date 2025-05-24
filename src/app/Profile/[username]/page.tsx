@@ -5,6 +5,7 @@ import React from "react";
  import Contribute from "../components/Contribute";
 import AddTier from "../components/AddTier";
 import Get from "../components/Get";
+import Summery from "../components/Summery"
 export default function page() {
   return (
     <div className="flex flex-col">
@@ -13,8 +14,9 @@ export default function page() {
  <div className="mt-20 z-20">
   <Contribute/> 
    <AddTier/> 
-  
-  <Get/>
+   
+  <Get/> 
+  <Summery/>
   </div>
  </div>
 

@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { client } from "@/lib/axios";
-
+import
 type SocialLink = {
   id: number;
-  url: string;
+  attributes: {
+    social: string;
+    url: string;
+  }
 };
 
 export default function Get() {
@@ -17,47 +20,22 @@ export default function Get() {
     const fetchSocialLinks = async () => {
       try {
         const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
 
-        if (!token) {
+        if (!token || !userId) {
           setError("User not authenticated.");
           return;
         }
-        console.log("Token: ", token);
-        console.log(
-          "Final URL: ",
-          "/social-links?populate=users_permissions_user"
-        );
 
-        // const response = await client.get(
-        //   "/social-links?populate=users_permissions_user",
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`,
-        //     },
-        //   }
-        // );
-        const response = await client.get("/users?populate=social_links,role", {
+        const response = await client.get(`/api/users/${userId}`, {
+        
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-     
-
-        console.log(response.data);
-
-        const allLinks = response.data?.data;
-
-        const userLinks = allLinks.filter(
-          (item: any) => item.attributes?.user?.data
-        );
-
-        const parsed = userLinks.map((item: any) => ({
-          id: item.id,
-          url: item.attributes.url,
-        }));
-
-        setLinks(parsed);
+        const userSocials = response.data.socials?.data || [];
+        setLinks(userSocials);
       } catch (err) {
         setError("Failed to fetch social links.");
         console.error(err);
@@ -69,25 +47,26 @@ export default function Get() {
     fetchSocialLinks();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>در حال بارگذاری...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="space-y-2">
-      <h2 className="text-lg font-semibold">Your Social Links</h2>
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold">شبکه‌های اجتماعی شما</h2>
       {links.length === 0 ? (
-        <p>You haven’t added any links yet.</p>
+        <p>هنوز هیچ لینکی اضافه نکرده‌اید.</p>
       ) : (
-        <ul className="list-disc pl-5">
+        <ul className="space-y-2">
           {links.map((link) => (
-            <li key={link.id}>
+            <li key={link.id} className="flex items-center gap-2">
+              <span className="font-medium">{link.attributes.social}:</span>
               <a
-                href={link.url}
+                href={link.attributes.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
               >
-                {link.url}
+                {link.attributes.url}
               </a>
             </li>
           ))}

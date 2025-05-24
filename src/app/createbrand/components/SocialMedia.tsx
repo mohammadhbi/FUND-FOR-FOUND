@@ -1,6 +1,4 @@
 "use client";
-import { client } from "@/lib/axios";
-import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import {
   FaGlobe,
@@ -16,7 +14,6 @@ import {
   FaChevronDown,
   FaChevronUp,
 } from "react-icons/fa";
-import { toast } from "react-toastify";
 
 const SOCIALS = [
   {
@@ -75,25 +72,23 @@ const SOCIALS = [
   },
 ] as const;
 
+import { client } from "@/lib/axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+
 type SocialType = (typeof SOCIALS)[number];
 type SocialLink = {
   type: SocialType;
   url: string;
 };
 
-interface SocialMediaProps {
-  onChange?: (links: SocialLink[]) => void;
-}
-
-export default function SocialMedia({ onChange }: SocialMediaProps) {
+export default function SocialMedia() {
   const [links, setLinks] = useState<SocialLink[]>([
     { type: SOCIALS[0], url: "" },
   ]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const dropdownRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const router = useRouter();
-  const ensureHttp = (url: string) =>
-    url.startsWith("https://") ? url : "https://" + url;
+const router =useRouter();
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (
@@ -129,55 +124,39 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
   };
 
   const handleSubmit = async () => {
-    const userId = localStorage.getItem("userId");
-
-    if (!userId) {
-      toast.error("User not authenticated");
-      return;
-    }
-
     try {
-      const validLinks = links.filter((link) => link.url?.trim());
+      const token = localStorage.getItem("token");
 
-      for (const link of validLinks) {
-        const payload = {
-          data: {
-            socials: link.type.value, 
-            url: ensureHttp(link.url.trim()),
-            users_permissions_user: Number(userId), 
-          },
-        };
-
-        console.log(
-          "📤 Sending payload to Strapi:",
-          JSON.stringify(payload, null, 2)
-        );
-
-        const response = await client.post(
+      const requests = links.map((link) =>
+        client.post(
           "/social-links",
-          payload
-        );
-
-        console.log("✅ Success:", response.data);
-      }
-
-      toast.success("Social links submitted!");
-      router.push("/createbrand/IntroBrand/Success");
-    } catch (error) {
-      console.error(
-        "❌ Error submitting social links:",
-        // error.response?.data || error
-        console.log(error)
+          {
+            data: {
+              social: link.type.value,
+              url: link.url,
+            },
+          },
+          {
+            headers: {
+              Authorization: ` Bearer ${token}`,
+            },
+          }
+        )
       );
-      toast.error("Failed to submit social links");
+ 
+      await Promise.all(requests);
+      toast.success("Social links saved successfully!");
+      router.push("/createbrand/IntroBrand/Success");
+    } catch (error: any) {
+      console.error("❌ خطا هنگام ارسال لینک‌ها:", {
+        response: error?.response,
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error.message,
+      });
+      alert("مشکلی در ارسال لینک‌ها پیش آمد!");
     }
   };
-
-  useEffect(() => {
-    if (onChange) {
-      onChange(links);
-    }
-  }, [links]);
   return (
     <div className="w-full max-w-[200px] lg:max-w-2xl mx-auto flex flex-col gap-4 mt-8">
       {links.map((item, idx) => (
@@ -215,7 +194,6 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
               </div>
             )}
           </div>
-          {/* Input */}
           <input
             className="w-full border border-[rgba(141,117,247,1)] rounded-lg px-4 py-2 focus:outline-none focus:ring-[rgba(141,117,247,1)] mb-2 lg:mb-0 lg:flex-1"
             placeholder={item.type.placeholder}
@@ -234,19 +212,24 @@ export default function SocialMedia({ onChange }: SocialMediaProps) {
           </button>
         </div>
       ))}
-      <button
-        className="mt-4 w-full self-center px-6 py-2 rounded-md border border-[rgba(199,198,198,1)] cursor-pointer bg-[rgba(245,245,245,1)] text-[rgba(113,113,113,1)] hover:bg-[rgba(199,198,198,1.5)] transition lg:w-fit"
-        type="button"
-        onClick={handleAdd}
-      >
-        + Add social link
-      </button>
-      <button
-        onClick={handleSubmit}
-        className="mt-2 w-full self-center px-6 py-2 rounded-md border border-purple-500 bg-purple-600 text-white hover:bg-purple-700 transition lg:w-fit"
-      >
-        Send
-      </button>
+
+      <div className="flex gap-4 mt-4 flex-col lg:flex-row lg:items-center">
+        <button
+          className="px-6 py-2 rounded-md border border-[rgba(199,198,198,1)] cursor-pointer bg-[rgba(245,245,245,1)] text-[rgba(113,113,113,1)] hover:bg-[rgba(199,198,198,1.5)] transition"
+          type="button"
+          onClick={handleAdd}
+        >
+          + Add social link
+        </button>
+
+        <button
+          onClick={handleSubmit}
+          className="px-6 py-2 rounded-md bg-[rgba(141,117,247,1)] text-white hover:bg-[rgba(121,97,227,1)] transition"
+          type="button"
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
 }
