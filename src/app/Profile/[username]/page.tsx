@@ -16,7 +16,7 @@ export default function page() {
    <AddTier/> 
    
   <Get/> 
-  <Summery/>
+  {/* <Summery/> */}
   </div>
  </div>
 

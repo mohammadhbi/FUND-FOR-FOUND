@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { client } from "@/lib/axios";
-import
+import Link from "next/link";
 type SocialLink = {
   id: number;
-  attributes: {
-    social: string;
-    url: string;
-  }
+  url: string;
+  documentId: string;
 };
 
 export default function Get() {
@@ -27,14 +25,21 @@ export default function Get() {
           return;
         }
 
-        const response = await client.get(`/api/users/${userId}`, {
-        
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await client.get(
+          `/social-links?filters[users_permissions_user][id][$eq]=${userId}&populate=*`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-        const userSocials = response.data.socials?.data || [];
+        const userSocials = res.data.data || [];
+        console.log("userId:", userId);
+        console.log("Full response:", res.data);
+        console.log("Extracted data:", res.data.data);
+
         setLinks(userSocials);
       } catch (err) {
         setError("Failed to fetch social links.");
@@ -47,27 +52,27 @@ export default function Get() {
     fetchSocialLinks();
   }, []);
 
-  if (loading) return <p>در حال بارگذاری...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">شبکه‌های اجتماعی شما</h2>
+      <h2 className="text-lg font-semibold">your social media</h2>
       {links.length === 0 ? (
-        <p>هنوز هیچ لینکی اضافه نکرده‌اید.</p>
+        <p>you dont have any social media !!</p>
       ) : (
         <ul className="space-y-2">
           {links.map((link) => (
             <li key={link.id} className="flex items-center gap-2">
-              <span className="font-medium">{link.attributes.social}:</span>
-              <a
-                href={link.attributes.url}
+             
+              <Link
+                href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
               >
-                {link.attributes.url}
-              </a>
+                {link.url}
+              </Link>
             </li>
           ))}
         </ul>
