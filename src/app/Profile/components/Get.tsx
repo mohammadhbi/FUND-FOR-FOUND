@@ -3,12 +3,42 @@
 import { useEffect, useState } from "react";
 import { client } from "@/lib/axios";
 import Link from "next/link";
+import {
+  FaGlobe,
+  FaYoutube,
+  FaInstagram,
+  FaTwitter,
+  FaDiscord,
+  FaWhatsapp,
+  FaTelegram,
+  FaFacebook,
+  FaLinkedin,
+  FaTimes,
+  FaChevronDown,
+  FaChevronUp,
+  FaLink,
+} from "react-icons/fa";
 type SocialLink = {
   id: number;
   url: string;
   documentId: string;
+  social: string;
 };
 
+const socialIcons: { [key: string]: JSX.ELement } = {
+  Website: <FaGlobe />,
+  Youtube: <FaYoutube />,
+  Instagram: <FaInstagram />,
+  Twitter: <FaTwitter />,
+  Discord: <FaDiscord />,
+  Whatsapp: <FaWhatsapp />,
+  Telegram: <FaTelegram />,
+  Facebook: <FaFacebook />,
+  Linkedin: <FaLinkedin />,
+  Times: <FaTimes />,
+  ChevronDown: <FaChevronDown />,
+  FaChevronUp: <FaChevronUp />,
+};
 export default function Get() {
   const [links, setLinks] = useState<SocialLink[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,24 +87,26 @@ export default function Get() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">your social media</h2>
       {links.length === 0 ? (
         <p>you dont have any social media !!</p>
       ) : (
         <ul className="space-y-2">
-          {links.map((link) => (
-            <li key={link.id} className="flex items-center gap-2">
-             
-              <Link
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
-              >
-                {link.url}
-              </Link>
-            </li>
-          ))}
+          {links.map((link) => {
+            const Icon = socialIcons[link.social] || <FaLink />;
+
+            return (
+              <li key={link.id}>
+                <Link
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xl text-blue-600 hover:text-blue-800"
+                >
+                  {Icon}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
