@@ -4,9 +4,12 @@ import React from "react";
  import Navbar from "../../components/Navbar";
  import Contribute from "../components/Contribute";
 import AddTier from "../components/AddTier";
+import dynamic from "next/dynamic";
 
-import Summery from "../components/Summery"
+const Summery = dynamic(() => import("../components/Summery"), { ssr: false });
+
 export default function page() {
+
   return (
     <div className="flex flex-col">
    <Navbar />
