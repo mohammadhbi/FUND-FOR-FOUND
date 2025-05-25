@@ -66,9 +66,9 @@ export default function Get() {
         );
 
         const userSocials = res.data.data || [];
-        console.log("userId:", userId);
-        console.log("Full response:", res.data);
-        console.log("Extracted data:", res.data.data);
+        // console.log("userId:", userId);
+        // console.log("Full response:", res.data);
+        // console.log("Extracted data:", res.data.data);
 
         setLinks(userSocials);
       } catch (err) {

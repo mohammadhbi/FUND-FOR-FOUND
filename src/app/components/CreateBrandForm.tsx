@@ -40,33 +40,34 @@ export default function CreateBrandForm() {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      const payload = { data };
-      const response = await client.post(
-        "/brand-forms",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
+      const payload = {
+        data: {
+          Brandname: data.Brandname,
+          Country: data.Country,
+          category: data.category,
+          Subcategory: data.Subcategory,
+          tags: data.tags,
+          agree: data.agree,
+          users_permissions_user: userId,
+        },
+      };
+      const response = await client.post("/brand-forms", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       console.log("Form submitted successfully:", response.data);
 
       if (step < stepsLength) {
         setStep(step + 1);
       }
-      router.push("/createbrand/IntroBrand")
+      router.push("/createbrand/IntroBrand");
     } catch (error) {
       console.error("Error submitting brand form:", error);
-      // if (error.response) {
-      //   setErrorMessage(
-      //     error.response.data?.error?.message ||
-      //       "Failed to submit the form. Please try again."
-      //   );
-      // } else {
-      //   setErrorMessage("An unexpected error occurred. Please try again.");
-      // }
     } finally {
       setIsLoading(false);
     }

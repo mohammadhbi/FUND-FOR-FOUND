@@ -126,7 +126,7 @@ const router =useRouter();
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId")
+      const userId = localStorage.getItem("userId");
       const requests = links.map((link) =>
         client.post(
           "/social-links",

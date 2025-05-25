@@ -3,15 +3,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { client } from "@/lib/axios";
-
+import axios from "axios";
 const EditorComponent = () => {
   const editorRef = useRef<any>(null);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  console.log(isEditorReady)
-  
+  console.log(isEditorReady);
+
   useEffect(() => {
     const initEditor = async () => {
       const EditorJS = (await import("@editorjs/editorjs")).default;
@@ -83,7 +83,10 @@ const EditorComponent = () => {
     initEditor();
 
     return () => {
-      if (editorRef.current && typeof editorRef.current.destroy === "function") {
+      if (
+        editorRef.current &&
+        typeof editorRef.current.destroy === "function"
+      ) {
         editorRef.current.destroy();
         editorRef.current = null;
       }
@@ -97,13 +100,23 @@ const EditorComponent = () => {
     try {
       const savedData = await editorRef.current.save();
       console.log("Saved data:", savedData);
-
-      const response = await client.post("/editor-contents", {
-        data: {
-          Title: "Brand story",
-          content: savedData,
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const response = await client.post(
+        "/editor-contents",
+        {
+          data: {
+            Title: "Brand story",
+            content: savedData,
+            users_permissions_user: userId,
+          },
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log("Server response:", response.data);
 
@@ -114,7 +127,10 @@ const EditorComponent = () => {
         toast.error("Something went wrong while saving");
       }
     } catch (error) {
-      console.error(error);
+      console.error("❌ Error while saving:", error);
+      if (axios.isAxiosError(error)) {
+        console.log("❌ Response Data:", error.response?.data);
+      }
       toast.error("An error occurred while saving");
     } finally {
       setLoading(false);
@@ -129,13 +145,13 @@ const EditorComponent = () => {
       />
       <div className="flex justify-end gap-2">
         <button
-          disabled={loading}className="px-10 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
+          disabled={loading}
+          className="px-10 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50"
         >
           Edit
         </button>
         <button
           onClick={handleSave}
-          
           className={`px-10 py-2 text-white rounded-md ${
             isSaved
               ? "bg-gray-400 cursor-not-allowed"
