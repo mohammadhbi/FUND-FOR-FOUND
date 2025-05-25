@@ -106,13 +106,13 @@ export default function Summary() {
   {!loading && contents.length === 0 && <p>No content available.</p>}
 
   {contents.map((item) => (
-    <div key={item.id} className="relative mb-8 p-4 border rounded">
-      <h2 className="text-xl font-bold mb-2">{item.Title}</h2>
+    <div key={item.id} className="relative mb-8 p-4 mt-7 rounded">
+      {/* <h2 className="text-xl font-bold mb-2">{item.Title}</h2> */}
 
       
 
 
-      <div className="text-sm bg-gray-100 p-2 rounded overflow-auto space-y-2">
+      <div className="text-sm bg-gray-100 p-2 rounded overflow-auto space-y-2 mt-8 mx-auto">
         {item.content?.blocks?.map((block: any) => {
           if (block.type === "paragraph") {
             return <p key={block.id}>{block.data.text}</p>;
@@ -139,13 +139,16 @@ export default function Summary() {
         })}
       </div>
 
-    
+    <div className="absolute top-0 left-15 flex gap-5 pb-3 ">
+      <p className="text-2xl">About </p>
+      
       <div
         onClick={() => handleEditClick(item)}
-        className="absolute mt-4.5 ml-25 text-[var(--color-primary)] px-2.5 py-0.5 bg-gray-300 rounded cursor-pointer"
+        className="text-[var(--color-primary)]  px-2.5 py-0.5 bg-gray-300 rounded cursor-pointer"
       >
         Edit
       </div>
+    </div>
     </div>
   ))}
 

@@ -4,6 +4,8 @@ import Image from "next/image";
 import defaultProfile from "../../../../public/defaultProfile.png";
 import { useCallback, useRef, useState, useEffect } from "react";
 import ProfileAvatar from "../components/ProfileAvatar";
+import Get from "./Get";
+
 
 export default function ProfileImage() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +65,10 @@ export default function ProfileImage() {
           <ProfileAvatar/>
 
           <p className="text-xs mt-1 text-black">{title}</p>
+         
+        </div>
+        <div className="absolute z-50 bottom-[-5px] left-20 ">
+          <Get/>
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import React from "react";
  import Navbar from "../../components/Navbar";
  import Contribute from "../components/Contribute";
 import AddTier from "../components/AddTier";
-import Get from "../components/Get";
+
 import Summery from "../components/Summery"
 export default function page() {
   return (
@@ -15,7 +15,7 @@ export default function page() {
   <Contribute/> 
    <AddTier/> 
    
-  <Get/> 
+ 
   <Summery/>
   </div>
  </div>
