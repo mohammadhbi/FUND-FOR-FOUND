@@ -153,11 +153,12 @@ export default function AddTier() {
   }, [tiers]);
 
   return (
-    <div className="flex gap-4 flex-wrap">
+    <div className="overflow-x-auto">
+      <div className="flex gap-4  w-max">
       {apiTiers.map((item) => (
         <div key={item.id} className="w-64 h-96 border rounded-md flex flex-col items-center bg-white shadow relative">
-          <div className="w-full h-6 bg-purple-700 rounded-t"></div>
-          <div className="mt-6 text-purple-700 font-semibold text-lg">{item.name}</div>
+          <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
+          <div className="mt-6 text-[var(--color-primary)] font-semibold text-lg">{item.name}</div>
           <div className="text-sm text-gray-500 mt-1">Start at {item.amount}$</div>
           <div className="text-xs text-gray-600 px-3 mt-2 text-center">{item.description}</div>
           {item.image && (
@@ -183,7 +184,7 @@ export default function AddTier() {
       ))}
 
       <div className="w-64 h-96 border rounded-md flex flex-col items-center bg-white shadow">
-        <div className="w-full h-6 bg-purple-700 rounded-t"></div>
+        <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
         <div className="mt-16 text-gray-500 text-lg">Add Tier</div>
         <button
           className="mt-4 w-12 h-12 bg-[var(--color-primary)] rounded-lg flex items-center justify-center text-white text-2xl hover:bg-purple-700"
@@ -194,8 +195,8 @@ export default function AddTier() {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 flex flex-col md:flex-row gap-6 relative">
+        <div className="fixed inset-0  z-[10000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 flex flex-col md:flex-row gap-6 relative z-[10000]">
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
@@ -204,7 +205,7 @@ export default function AddTier() {
             </button>
 
             <div className="flex-1 space-y-4">
-              <h2 className="text-xl font-semibold text-purple-700">Tier Type</h2>
+              <h2 className="text-xl font-semibold text-[var(--color-primary)]">Tier Type</h2>
 
               <input
                 type="text"
@@ -245,14 +246,14 @@ export default function AddTier() {
 
               <button
                 onClick={handleSave}
-                className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+                className="bg-[var(--color-primary)] text-white px-4 py-2 rounded hover:bg-purple-700"
               >
                 Save
               </button>
             </div>
 
             <div className="flex-1 p-4 border rounded space-y-2 bg-gray-50">
-              <h3 className="text-purple-700 font-bold text-center text-lg">
+              <h3 className="text-[var(--color-primary)] font-bold text-center text-lg">
                 {form.name || "Preview Name"}
               </h3>
               <p className="text-sm text-gray-500 text-center">
@@ -274,6 +275,7 @@ export default function AddTier() {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

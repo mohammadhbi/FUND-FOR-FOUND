@@ -14,7 +14,7 @@ export default function page() {
     <div className="flex flex-col">
    <Navbar />
   <ProfileImage />
- <div className="mt-20 z-20">
+ <div className="mt-20 z-[10000]">
   <Contribute/> 
    <AddTier/> 
    
