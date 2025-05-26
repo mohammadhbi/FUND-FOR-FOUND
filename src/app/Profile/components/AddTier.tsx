@@ -1,13 +1,31 @@
+
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { client } from "@/lib/axios";
 
 interface Tier {
   name: string;
   description: string;
   amount: string;
   coverPhoto: File | null;
+}
+
+interface TierFromApi {
+  id: number;
+  attributes: {
+    name: string;
+    description: string;
+    amount: string;
+    image?: {
+      data?: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
+  };
 }
 
 export default function AddTier() {
@@ -25,29 +43,21 @@ export default function AddTier() {
     description: "",
     amount: "",
   });
+ const [apiTiers,setTierApi]=useState<TierFromApi[]>([])
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
 
     if (name === "amount") {
-      // فقط عدد مجازه
-      if (!/^\d*$/.test(value)) {
-        setErrors((prev) => ({ ...prev, amount: "Only numbers are allowed" }));
+      if (!/^[0-9]*$/.test(value)) {
+        setErrors((prev) => ({ ...prev, amount: "Only numbers allowed" }));
         return;
       } else {
         setErrors((prev) => ({ ...prev, amount: "" }));
       }
     } else {
-      if (!/^[a-zA-Z\s]*$/.test(value)) {
-        setErrors((prev) => ({
-          ...prev,
-          [name]: "Only letters are allowed",
-        }));
-        return;
-      } else {
-        setErrors((prev) => ({ ...prev, [name]: "" }));
-      }
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
 
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -60,41 +70,99 @@ export default function AddTier() {
 
   const handleSave = () => {
     if (tierIndex !== null) {
-      const updateTiers = [...tiers];
-      updateTiers[tierIndex] = form;
-      setTiers(updateTiers);
+      const updated = [...tiers];
+      updated[tierIndex] = form;
+      setTiers(updated);
     } else {
       setTiers((prev) => [...prev, form]);
     }
-    setForm({
-      name: "",
-      description: "",
-      amount: "",
-      coverPhoto: null,
-    });
+    setForm({ name: "", description: "", amount: "", coverPhoto: null });
     setTierIndex(null);
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    const fetchTiers =async () =>{
+      try {
+        const res = await client.get("/tiers?populate=*");
+        setTierApi(res.data.data);
+      } catch (error) {
+        console.error("error:",error);
+      }
+    }
+    const uploadImage = async (file: File): Promise<number | null> => {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+
+      formData.append("files", file);
+
+      try {
+        const res = await client.post("/upload", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return res.data[0].id;
+      } catch (err) {
+        console.error("❌ Error uploading image:", err.response?.data || err.message);
+        return null;
+      }
+    };
+
+    const postTiers = async () => {
+      const token = localStorage.getItem("token");
+      const userId = Number(localStorage.getItem("userId"));
+
+      for (const tier of tiers) {
+        let imageId: number | null = null;
+
+        if (tier.coverPhoto) {
+          imageId = await uploadImage(tier.coverPhoto);
+        }
+
+        try {
+          await client.post(
+            "/tiers",
+            {
+              data: {
+                name: tier.name,
+                description: tier.description,
+                amount: tier.amount,
+                users_permissions_user: userId,
+                ...(imageId && { image: imageId }),
+              },
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          console.log(`✅ Tier "${tier.name}" submitted`);
+        } catch (error: any) {
+          console.error(`❌ Error submitting tier "${tier.name}":`, error.response?.data || error.message);
+        }
+      }
+    };
+
+    if (tiers.length > 0) {
+      postTiers();
+    }
+    fetchTiers()
+  }, [tiers]);
+
   return (
     <div className="flex gap-4 flex-wrap">
-      {tiers.map((tier, index) => (
-        <div
-          key={index}
-          className="w-64 h-96 border rounded-md flex flex-col items-center bg-white shadow relative"
-        >
+      {apiTiers.map((item) => (
+        <div key={item.id} className="w-64 h-96 border rounded-md flex flex-col items-center bg-white shadow relative">
           <div className="w-full h-6 bg-purple-700 rounded-t"></div>
-          <div className="mt-6 text-purple-700 font-semibold text-lg">
-            {tier.name}
-          </div>
-          <div className="text-sm text-gray-500 mt-1">
-            Start at {tier.amount}$
-          </div>
-          <div className="text-xs text-gray-600 px-3 mt-2 text-center">
-            {tier.description}
-          </div>
-          {tier.coverPhoto && (
+          <div className="mt-6 text-purple-700 font-semibold text-lg">{item.name}</div>
+          <div className="text-sm text-gray-500 mt-1">Start at {item.amount}$</div>
+          <div className="text-xs text-gray-600 px-3 mt-2 text-center">{item.description}</div>
+          {item.image && (
             <Image
-              src={URL.createObjectURL(tier.coverPhoto)}
+              src={URL.createObjectURL(item.image)}
               alt="cover"
               width={200}
               height={120}
@@ -103,11 +171,11 @@ export default function AddTier() {
           )}
           <button
             onClick={() => {
-              setForm(tier);
-              setTierIndex(index);
+              setForm(item);
+              setTierIndex(item);
               setIsOpen(true);
             }}
-            className="absolute bottom-2  bg-[var(--color-primary)] border px-2 py-1 text-xl text-white w-[90%] rounded hover:bg-gray-100"
+            className="absolute bottom-2 bg-[var(--color-primary)] border px-2 py-1 text-xl text-white w-[90%] rounded hover:bg-gray-100"
           >
             Edit Tier
           </button>
@@ -136,9 +204,7 @@ export default function AddTier() {
             </button>
 
             <div className="flex-1 space-y-4">
-              <h2 className="text-xl font-semibold text-purple-700">
-                Tier Type
-              </h2>
+              <h2 className="text-xl font-semibold text-purple-700">Tier Type</h2>
 
               <input
                 type="text"
@@ -148,9 +214,8 @@ export default function AddTier() {
                 placeholder="Name"
                 className="border px-3 py-2 w-full rounded"
               />
-              {errors.name && (
-                <div className="text-red-500 text-sm">{errors.name}</div>
-              )}
+              {errors.name && <div className="text-red-500 text-sm">{errors.name}</div>}
+
               <textarea
                 name="description"
                 value={form.description}
@@ -159,9 +224,8 @@ export default function AddTier() {
                 rows={3}
                 className="border px-3 py-2 w-full rounded"
               />
-              {errors.name && (
-                <div className="text-red-500 text-sm">{errors.name}</div>
-              )}
+              {errors.description && <div className="text-red-500 text-sm">{errors.description}</div>}
+
               <input
                 type="text"
                 name="amount"
@@ -170,9 +234,8 @@ export default function AddTier() {
                 placeholder="Amount"
                 className="border px-3 py-2 w-full rounded"
               />
-              {errors.amount && (
-                <div className="text-red-500 text-sm">{errors.amount}</div>
-              )}
+              {errors.amount && <div className="text-red-500 text-sm">{errors.amount}</div>}
+
               <input
                 type="file"
                 onChange={handleFileChange}

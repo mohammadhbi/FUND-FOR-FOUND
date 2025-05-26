@@ -131,13 +131,14 @@ export default function Summary() {
       const savedData = await editorRef.current.save();
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
+    
       await client.put(
         `/editor-contents/${selectedItem.id}`,
         {
           data: {
             Title: selectedItem.Title,
             content: savedData,
-            users_permissions_user: userId,
+             users_permissions_user: userId,
           },
         },
         {
@@ -151,6 +152,7 @@ export default function Summary() {
     } catch (error) {
       toast.error("Error saving summary");
       console.error(error);
+      console.log(selectedItem?.id)
     } finally {
       setLoading(false);
       setShowModal(false);
