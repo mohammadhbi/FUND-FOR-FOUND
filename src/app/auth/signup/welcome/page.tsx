@@ -15,7 +15,7 @@ function WelcomePage() {
      Go homepage
      </span>
       </Link>
-      <Link href="/">
+      <Link href="/createbrand">
      <span className='text-white bg-[var(--color-primary)] rounded px-6 py-2.5'>
      Start project   
      </span>

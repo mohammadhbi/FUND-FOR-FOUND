@@ -5,31 +5,73 @@ import defaultProfile from "../../../../public/defaultProfile.png";
 import { useCallback, useRef, useState, useEffect } from "react";
 import ProfileAvatar from "../components/ProfileAvatar";
 import Get from "./Get";
-
+import imageCompression from 'browser-image-compression';
 
 export default function ProfileImage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const title = "Korush";
+const [title,setTitle]=useState<string | null>(null);
   useEffect(() => {
-    setIsClient(true);
+      const NameAvatar = localStorage.getItem("username");
+setTitle(NameAvatar);
+      setIsClient(true);
+      // const brandId = localStorage.getItem("brandId");
+      
+
+      
   }, []);
+
 
   const handleClick = useCallback(() => {
     inputRef.current?.click();
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const compressImage = async (file : File): Promise<File> =>{
+  const options = {
+    maxSizeMb : 1,
+    useWebWorker : true,
+  };
+  try {
+    const compressedFile = await imageCompression(file,options);
+     console.log("before:", (file.size / 1024 / 1024).toFixed(2), "MB");
+    console.log("after:", (compressedFile.size / 1024 / 1024).toFixed(2), "MB");
+    return compressedFile;
+  } catch (error) {
+   console.error("missed compressing",error);
+   throw error; 
+  }
+}
+
+const convertToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
+
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      const objectUrl = URL.createObjectURL(file);
-      setImageSrc(objectUrl);
+    // if (file && file.type.startsWith("image/")) {
+    //   const objectUrl = URL.createObjectURL(file);
+    //   setImageSrc(objectUrl);
+    // }
+    try {
+      const compressedFile = await compressImage(file);
+      const base64 = await convertToBase64(compressedFile);
+      setImageSrc(base64);
+      // console.log(base64);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <div>
+     
       <div className="relative w-[90%] h-[200px] object-cover mx-auto mt-6">
         <Image
           src={imageSrc || defaultProfile}
@@ -67,7 +109,7 @@ export default function ProfileImage() {
           <p className="text-xs mt-1 text-black">{title}</p>
          
         </div>
-        <div className="absolute z-50 bottom-[-5px] left-20 ">
+        <div className="absolute z-50 bottom-[-5px] left-30 ">
           <Get/>
         </div>
       </div>

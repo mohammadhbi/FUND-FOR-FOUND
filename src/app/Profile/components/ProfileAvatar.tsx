@@ -1,11 +1,13 @@
 "use client";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { client } from "@/lib/axios";
 
 export default function ProfileAvatar() {
-  const title = "kurosh";
+  const title = localStorage.getItem("username");
   const inputRef = useRef<HTMLInputElement>(null);
   const [image, setImage] = useState<string | null>(null);
+  
   const handleClick = useCallback(() => {
     inputRef.current?.click();
   }, []);
@@ -16,13 +18,15 @@ export default function ProfileAvatar() {
       setImage(objectUrl);
     }
   };
+  
+
 
   return (
     <div className="relative px-2.5 py-1 bg-[var(--color-primary)] rounded flex items-center justify-center">
       {image ? (
         <Image src={image} width={55} height={55} alt="Profile Image" />
       ) : (
-        <span className="opacity-25 text-4xl">{title.slice(0, 1)}</span>
+         <span className="opacity-25 text-4xl">{title.slice(0, 1)}</span>
       )}
 
       <button

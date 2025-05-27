@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { client } from "@/lib/axios";
 
 export type SignupFormData = {
   firstName: string;
@@ -49,8 +50,8 @@ function SignupForm() {
     console.log("signup data:", data);
     setIsSubmitting(true);
     try {
-      const response = await axios.post(
-        "https://my-strapi-project-lm3x.onrender.com/api/auth/local/register",
+      const response = await client.post(
+        "/auth/local/register",
         {
           username: `${data.firstName} ${data.lastName}`,
           email: data.email,

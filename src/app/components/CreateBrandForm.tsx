@@ -6,6 +6,7 @@ import NextButtonStep from "../createbrand/components/NextButtonStep";
 import { useRouter } from "next/navigation";
 import { client } from "@/lib/axios";
 
+
 type FormValues = {
   Brandname: string;
   category: string;
@@ -59,7 +60,18 @@ export default function CreateBrandForm() {
           "Content-Type": "application/json",
         },
       });
+      // ⚠️ NOTE: This is  a worst practice.
+// Ideally, we should always use the exact ID returned by the backend.
+// Due to auto-increment behavior in the database and mismatches between created records,
+// I'm manually adjusting the ID here as a temporary workaround.
 
+const actualId = response.data.data.id;
+const brandId = actualId - 1;
+
+console.log("📦 Real ID:", actualId);
+console.log("🛠 Adjusted ID:", brandId);
+
+localStorage.setItem("brandId", String(brandId));
       console.log("Form submitted successfully:", response.data);
 
       if (step < stepsLength) {
@@ -191,7 +203,7 @@ export default function CreateBrandForm() {
                 {tags.map((tag: string, index: number) => (
                   <span
                     key={index}
-                    className="bg-gray-800 text-white px-2 py-1 rounded-md flex items-center"
+                    className="bg-gray-100 text-gray-800 px-2 py-1 rounded-md flex items-center"
                   >
                     {tag}
                     <button
