@@ -157,7 +157,7 @@ export default function AddTier() {
     <div className="overflow-x-auto">
       <div className="flex gap-4  w-max">
       {apiTiers.map((item) => (
-        <div key={item.id} className="w-64 h-96 border border-gray-300  rounded-md flex flex-col items-center bg-white shadow relative">
+        <div key={item.id} className="w-64 h-96 border border-gray-300  rounded-md flex flex-col items-center  shadow relative">
           <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
           <div className="mt-6 text-[var(--color-primary)] font-semibold text-lg">{item.name}</div>
           <div className="text-sm text-gray-500 mt-1">Start at {item.amount}$</div>

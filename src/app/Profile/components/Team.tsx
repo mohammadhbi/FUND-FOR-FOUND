@@ -1,80 +1,154 @@
 "use client";
-import { client } from "@/lib/axios";
 import { useEffect, useState } from "react";
+import { client } from "@/lib/axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-interface Team {
+interface TeamForm {
   name: string;
-  role : string;
+  role: string;
   email: string;
   description: string;
 }
 
+interface TeamData {
+  id: number;
+  documentId: string;
+  name: string;
+  role: string;
+  email: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+
 export default function Team() {
   const [isOpen, setIsOpen] = useState(false);
-  const [form, setForm] = useState<Team>({
+  const [form, setForm] = useState<TeamForm>({
     name: "",
     role: "",
-    email : "",
+    email: "",
+    description: "",
+  });
+  const [teams, setTeams] = useState<TeamData[]>([]);
+  const [errors, setErrors] = useState({
+    name: "",
+    role: "",
+    email: "",
     description: "",
   });
 
-  const [errors, setErrors] = useState({
-     name: "",
-    role: "",
-    email : "",
-    description: "",
-  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-
-    if (name === "amount") {
-      if (!/^[0-9]*$/.test(value)) {
-        setErrors((prev) => ({ ...prev, amount: "Only numbers allowed" }));
-        return;
-      } else {
-        setErrors((prev) => ({ ...prev, amount: "" }));
-      }
-    } else {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-
+    setErrors((prev) => ({ ...prev, [name]: "" }));
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-useEffect(()=>{
-const postTeam = async ()=>{
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
-  try {
-    const res = await client.post("/Teams",{
-      data:{
-        name: Team.name,
-        role: Team.role,
-        email: Team.email,
-        description:Team.description,
-        users_permissions_user: userId,
-      },
-    },
-  {
-    headers: {
-                Authorization: `Bearer ${token}`,
-              }
-  });
-  console.log(`Team "${Team.name}" submitted`)
-  } catch (error) {
-    console.error(`❌ Error submitting tier "${Team.name}":`,  error)
-  }
-};
-if (Team.length>0){
-  postTeam();
-}
-},[])
+
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    if (!form.name || !form.role || !form.email) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+
+    try {
+      await client.post(
+        "/Teams",
+        {
+          data: {
+            ...form,
+            users_permissions_user: userId,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success(`✅ Team member "${form.name}" added successfully`);
+      setIsOpen(false);
+      setForm({ name: "", role: "", email: "", description: "" });
+      await fetchTeam();
+    } catch (error) {
+      toast.error("❌ Failed to add team member");
+      console.error(error);
+      console.log(errors);
+    }
+  };
+
+
+  const fetchTeam = async () => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    try {
+      const response = await client.get(
+        `/teams?filters[users_permissions_user][id][$eq]=${userId}&populate=*`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setTeams(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeam();
+  }, []);
 
   return (
-    <div>
+    <div className="overflow-x-auto flex gap-4 flex-wrap p-4">
+      <ToastContainer position="top-center" autoClose={3000} />
+
+    
+      {teams.map((team) => {
+       
+
+        return (
+          <div
+            key={team.id}
+            className="w-64 h-96 border border-gray-300 rounded-md flex flex-col items-center shadow relative bg-white"
+          >
+            <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
+            <div className="mt-6 text-[var(--color-primary)] font-semibold text-lg">
+              {team.name}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">{team.role}</div>
+            <div className="text-xs text-gray-600 px-3 mt-2 text-center">
+              {team.description}
+            </div>
+            <button
+              onClick={() => {
+                setForm({
+                  name: team.name,
+                  role: team.role,
+                  email: team.email,
+                  description: team.description,
+                });
+                setIsOpen(true);
+              }}
+              className="absolute bottom-2 bg-[var(--color-primary)] px-2 py-1 text-sm text-white w-[90%] rounded hover:bg-purple-700"
+            >
+              Edit Team
+            </button>
+          </div>
+        );
+      })}
+
+     
       <div className="w-64 h-96 border border-gray-300 rounded-md flex flex-col items-center bg-white shadow">
         <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
         <div className="mt-16 text-gray-500 text-lg">Invite Team member</div>
@@ -84,106 +158,82 @@ if (Team.length>0){
         >
           +
         </button>
-        {isOpen && (
-          <div className="fixed inset-0  z-[10000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 flex flex-col md:flex-row gap-6 relative z-[10000]">
+      </div>
+
+     
+      {isOpen && (
+        <div className="fixed inset-0 z-[10000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 flex flex-col md:flex-row gap-6 relative z-[10000]">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+            >
+              &times;
+            </button>
+
+            <div className="flex-1 space-y-4">
+              <label className="text-black">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Name"
+                className="border px-3 py-2 w-full rounded"
+              />
+
+              <label className="text-black">Role</label>
+              <input
+                type="text"
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                placeholder="Admin"
+                className="border px-3 py-2 w-full rounded"
+              />
+
+              <label className="text-black">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email@example.com"
+                className="border px-3 py-2 w-full rounded"
+              />
+
+              <label className="text-black">Description</label>
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Short description"
+                rows={3}
+                className="border px-3 py-2 w-full rounded"
+              />
+
               <button
-                onClick={() => setIsOpen(false)}
-                className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+                onClick={handleSave}
+                className="bg-[var(--color-primary)] text-white px-4 py-2 rounded hover:bg-purple-700"
               >
-                &times;
+                Save
               </button>
+            </div>
 
-              <div className="flex-1 space-y-4">
-                <h2 className="text-black">
-                  Name
-                </h2>
-
-                <input
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Name"
-                  className="border px-3 py-2 w-full rounded"
-                />
-                {errors.name && (
-                  <div className="text-red-500 text-sm">{errors.name}</div>
-                )}
-
-                <h2 className="text-black">
-                  Role
-                </h2>
-
-                <input
-                  type="text"
-                  name="role"
-                  value={form.role}
-                  onChange={handleChange}
-                  placeholder="Admin"
-                  className="border px-3 py-2 w-full rounded"
-                />
-                {errors.role && (
-                  <div className="text-red-500 text-sm">{errors.role}</div>
-                )}
-   <h2 className="text-black">
-                  Email Address
-                </h2>
-
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="Email@example.com"
-                  className="border px-3 py-2 w-full rounded"
-                />
-                {errors.email && (
-                  <div className="text-red-500 text-sm">{errors.email}</div>
-                )}
-                <h2 className="text-black">
-                  Description
-                </h2>
-                <textarea
-                  name="description"
-                  value={form.description}
-                  onChange={handleChange}
-                  placeholder="Reward description"
-                  rows={3}
-                  className="border px-3 py-2 w-full rounded"
-                />
-                {errors.description && (
-                  <div className="text-red-500 text-sm">
-                    {errors.description}
-                  </div>
-                )}
-
-                
-
-
-                <button
-                  // onClick={handleSave}
-                  className="bg-[var(--color-primary)] text-white px-4 py-2 rounded hover:bg-purple-700"
-                >
-                  Save
-                </button>
-              </div>
-
-              <div className="flex-1 p-4 border rounded space-y-2 bg-gray-50">
-                <h3 className="text-[var(--color-primary)] font-bold text-center text-lg">
-                  {form.name || "Preview Name"}
-                </h3>
-                <p className="text-sm text-gray-700 bg-gray-400 rounded-l-2xl rounded-r-2xl  text-center">
-                   {form.role ||  "Team member" }
-                </p>
-                <p className="text-sm text-gray-600">
-                  {form.description || "No description yet..."}
-                </p>
-              </div>
+            <div className="flex-1 p-4 border rounded space-y-2 bg-gray-50">
+              <h3 className="text-[var(--color-primary)] font-bold text-center text-lg">
+                {form.name || "Preview Name"}
+              </h3>
+              <p className="text-sm text-gray-700 bg-gray-400 rounded-l-2xl rounded-r-2xl text-center">
+                {form.role || "Team member"}
+              </p>
+              <p className="text-sm text-gray-600">
+                {form.description || "No description yet..."}
+              </p>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
