@@ -86,6 +86,7 @@ export default function AddTier() {
       try {
         const res = await client.get("/tiers?populate=*");
         setTierApi(res.data.data);
+        console.log(res.data.data)
       } catch (error) {
         console.error("error:",error);
       }

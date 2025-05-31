@@ -120,7 +120,7 @@ export default function NavbarHome() {
         </div>
       </nav>
       {isSearchOpen && (
-        <div className="lg:hidden bg-white w-full px-4 py-2 border-b border-gray-200 z-40 mt-16">
+        <div className="lg:hidden  w-full px-4 py-2 border-b border-gray-200 z-40 mt-16">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3">
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
@@ -135,7 +135,7 @@ export default function NavbarHome() {
         </div>
       )}
       {isOpen && (
-        <div className="lg:hidden bg-white w-64 h-screen absolute top-16 right-0 shadow-lg z-40">
+        <div className="lg:hidden  backdrop-blur-lg bg-white/10 w-64 h-screen absolute top-16 right-0 shadow-lg z-40">
           <ul className="flex flex-col items-start gap-4 text-sm text-gray-3 p-6">
             {navItems.map((item) => (
               <li key={item.href}>

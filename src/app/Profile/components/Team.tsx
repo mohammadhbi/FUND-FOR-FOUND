@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { client } from "@/lib/axios";
+import { useEffect, useState } from "react";
 
 interface Team {
   name: string;
@@ -43,6 +44,34 @@ export default function Team() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+useEffect(()=>{
+const postTeam = async ()=>{
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  try {
+    const res = await client.post("/Teams",{
+      data:{
+        name: Team.name,
+        role: Team.role,
+        email: Team.email,
+        description:Team.description,
+        users_permissions_user: userId,
+      },
+    },
+  {
+    headers: {
+                Authorization: `Bearer ${token}`,
+              }
+  });
+  console.log(`Team "${Team.name}" submitted`)
+  } catch (error) {
+    console.error(`❌ Error submitting tier "${Team.name}":`,  error)
+  }
+};
+if (Team.length>0){
+  postTeam();
+}
+},[])
 
   return (
     <div>

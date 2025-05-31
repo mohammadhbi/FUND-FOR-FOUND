@@ -24,8 +24,8 @@ const Contributing = [
 function Footer() {
   return (
     <div>
-      <footer className="bg-[var(--color-light-3)] mt-20 p-5 rounded-t-2xl">
-        {/* دسکتاپ */}
+      <footer className=" mt-20 p-5 rounded-t-2xl">
+
         <div className="hidden sm:flex justify-start gap-x-32 border-b border-b-[var(--color-primary)] md:pr-[33.33%] sm:justify-center">
           <ul className="flex flex-col gap-x-4 gap-y-2.5">
             {About.map((item) => (
@@ -67,7 +67,7 @@ function Footer() {
           </ul>
         </div>
 
-        {/* موبایل و تبلت */}
+ 
         <div className="sm:hidden flex flex-col border-b border-b-[var(--color-primary)] pb-4 gap-y-5">
           <div className="flex flex-wrap gap-x-0.5 gap-y-4 justify-center">
             {[About, Resources, Contributing].map((section, index) => (
