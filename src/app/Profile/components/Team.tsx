@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { client } from "@/lib/axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface TeamForm {
@@ -23,7 +23,6 @@ interface TeamData {
   publishedAt: string;
 }
 
-
 export default function Team() {
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState<TeamForm>({
@@ -40,7 +39,6 @@ export default function Team() {
     description: "",
   });
 
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -48,7 +46,6 @@ export default function Team() {
     setErrors((prev) => ({ ...prev, [name]: "" }));
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const handleSave = async () => {
     const token = localStorage.getItem("token");
@@ -85,7 +82,6 @@ export default function Team() {
     }
   };
 
-
   const fetchTeam = async () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
@@ -110,46 +106,40 @@ export default function Team() {
   }, []);
 
   return (
-    <div className="overflow-x-auto flex gap-4 flex-wrap p-4">
-      <ToastContainer position="top-center" autoClose={3000} />
-
-    
-      {teams.map((team) => {
-       
-
-        return (
-          <div
-            key={team.id}
-            className="w-64 h-96 border border-gray-300 rounded-md flex flex-col items-center shadow relative bg-white"
-          >
-            <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
-            <div className="mt-6 text-[var(--color-primary)] font-semibold text-lg">
-              {team.name}
-            </div>
-            <div className="text-sm text-gray-500 mt-1">{team.role}</div>
-            <div className="text-xs text-gray-600 px-3 mt-2 text-center">
-              {team.description}
-            </div>
-            <button
-              onClick={() => {
-                setForm({
-                  name: team.name,
-                  role: team.role,
-                  email: team.email,
-                  description: team.description,
-                });
-                setIsOpen(true);
-              }}
-              className="absolute bottom-2 bg-[var(--color-primary)] px-2 py-1 text-sm text-white w-[90%] rounded hover:bg-purple-700"
+    <div className="overflow-x-auto">
+      <div className="flex gap-4  w-max">
+        {teams.map((team) => {
+          return (
+            <div
+              key={team.id}
+              className="w-64 h-96 border border-gray-300  rounded-md flex flex-col items-center  shadow relative"
             >
-              Edit Team
-            </button>
-          </div>
-        );
-      })}
-
-     
-      <div className="w-64 h-96 border border-gray-300 rounded-md flex flex-col items-center bg-white shadow">
+              <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
+              <div className="mt-6 text-[var(--color-primary)] font-semibold text-lg">
+                {team.name}
+              </div>
+              <div className="text-sm text-gray-500 mt-1">{team.role}</div>
+              <div className="text-xs text-gray-600 px-3 mt-2 text-center">
+                {team.description}
+              </div>
+              <button
+                onClick={() => {
+                  setForm({
+                    name: team.name,
+                    role: team.role,
+                    email: team.email,
+                    description: team.description,
+                  });
+                  setIsOpen(true);
+                }}
+                className="absolute bottom-2 bg-[var(--color-primary)] px-2 py-1 text-sm text-white w-[90%] rounded hover:bg-purple-700"
+              >
+                Edit Team
+              </button>
+            </div>
+          );
+        })}
+            <div className="w-64 h-96 border border-gray-300 rounded-md flex flex-col items-center bg-white shadow">
         <div className="w-full h-6 bg-[var(--color-primary)] rounded-t"></div>
         <div className="mt-16 text-gray-500 text-lg">Invite Team member</div>
         <button
@@ -159,8 +149,10 @@ export default function Team() {
           +
         </button>
       </div>
+      </div>
 
-     
+  
+
       {isOpen && (
         <div className="fixed inset-0 z-[10000] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 flex flex-col md:flex-row gap-6 relative z-[10000]">

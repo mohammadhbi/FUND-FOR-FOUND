@@ -6,6 +6,7 @@ import Contribute from "../components/Contribute";
 import AddTier from "../components/AddTier";
 import dynamic from "next/dynamic";
 import Team from "../components/Team";
+import Faq from "../components/Faq";
 const Summery = dynamic(() => import("../components/Summery"), { ssr: false });
 
 export default function page() {
@@ -18,6 +19,7 @@ export default function page() {
         <AddTier />
         <Summery />
         <Team/>
+        <Faq/>
       </div>
     </div>
   );
