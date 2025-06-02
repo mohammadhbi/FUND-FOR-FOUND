@@ -1,0 +1,62 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { client } from '@/lib/axios';
+
+export default function Page() {
+  const { username } = useParams();
+  const [isValid, setIsValid] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const usernamels = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
+
+    // console.log('usernameUrl:', username);
+    // console.log('username:', usernamels);
+
+    if (!username || !token) {
+      setIsValid(false);
+      return;
+    }
+
+    if (username !== usernamels) {
+      setIsValid(false);
+      return;
+    }
+
+    const fetchUser = async () => {
+      const userId = localStorage.getItem('userId');
+    //   console.log('userId:', userId);
+      if (!userId) {
+        setIsValid(false);
+        return;
+      }
+      try {
+         await client.get(`/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        // console.log('API Response:', response.data);
+        setIsValid(true);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setIsValid(false);
+      }
+    };
+    fetchUser();
+  }, [username]);
+
+  if (isValid === null) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!isValid) {
+    return <h1>Unauthorized: Username mismatch or invalid token</h1>;
+  }
+
+  return(
+    <h1>Welcome, {username}!</h1>
+  );
+}
