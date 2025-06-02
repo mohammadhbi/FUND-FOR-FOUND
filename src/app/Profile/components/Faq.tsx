@@ -2,6 +2,10 @@ import { client } from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { FaAngleDown } from "react-icons/fa";
+import { FaAngleUp } from "react-icons/fa";
+import { LuPencil } from "react-icons/lu";
+
 interface Ask {
   question: string;
   answer: string;
@@ -15,7 +19,7 @@ export default function Faq() {
   });
   const [faqs, setFaqs] = useState<Ask[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isShow, setIsShow] = useState(false);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -31,7 +35,7 @@ export default function Faq() {
         "/faqs",
         {
           data: {
-      ...form,
+            ...form,
             users_permissions_user: userId,
           },
         },
@@ -75,15 +79,29 @@ export default function Faq() {
   }, []);
 
   return (
-    <div className="relative mt-20 pt-20 flex flex-col justify-center items-center">
+    <div className="relative w-[100%] mt-20 pt-20 flex flex-col justify-center items-center">
       <p>FAQ</p>
-      <div className="overflow-x-auto">
-        <div className="flex gap-4 w-max">
+      <div className="">
+        <div className=" w-full gap-4 ">
           {faqs.map((faq) => {
             return (
-              <div key={faq.id}>
-                <div>{faq.question}</div>
-                <div>{faq.answer}</div>
+              <div key={faq.id} className=" w-full">
+                <div
+                  className="flex w-90 gap-4 rounded-sm justify-center p-3 "
+                  
+                >
+                  <div className="flex justify-between border border-[var(--color-primary)] rounded-md w-full  mb-3.5 p-3"
+                  
+                  onClick={() => setIsShow(!isShow)}>
+                    {faq.question}
+                    {isShow ? <FaAngleUp /> : <FaAngleDown />}
+                  </div>
+                  <div className="border border-[var(--color-primary)] rounded-md flex justify-center items-center w-[10%] mb-3 p-3 text-2xl">
+                    <LuPencil />
+                  </div>
+                </div>
+
+                {isShow && <div className="bg-gray-100 p-2.5 rounded-xl mb-2.5">{faq.answer}</div>}
               </div>
             );
           })}
