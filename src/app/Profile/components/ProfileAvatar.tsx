@@ -1,7 +1,7 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import { client } from "@/lib/axios";
+
 
 export default function ProfileAvatar() {
   const title = localStorage.getItem("username");
@@ -26,7 +26,7 @@ export default function ProfileAvatar() {
       {image ? (
         <Image src={image} width={55} height={55} alt="Profile Image" />
       ) : (
-         <span className="opacity-25 text-4xl">{title.slice(0, 1)}</span>
+         <span className="opacity-25 text-4xl">{title.charAt(0)}</span>
       )}
 
       <button
