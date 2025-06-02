@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { client } from '@/lib/axios';
+import Navbar from '@/app/components/Navbar';
+import SideBar from '../components/SideBar';
 
 export default function Page() {
   const { username } = useParams();
@@ -56,7 +58,10 @@ export default function Page() {
     return <h1>Unauthorized: Username mismatch or invalid token</h1>;
   }
 
-  return(
-    <h1>Welcome, {username}!</h1>
+  return(<div>
+      <Navbar/>
+      <SideBar/>
+
+  </div>
   );
 }

@@ -149,13 +149,13 @@ const router =useRouter();
       toast.success("Social links saved successfully!");
       router.push("/createbrand/IntroBrand/Success");
     } catch (error: any) {
-      console.error("❌ خطا هنگام ارسال لینک‌ها:", {
+      console.error("❌ error", {
         response: error?.response,
         status: error?.response?.status,
         data: error?.response?.data,
         message: error.message,
       });
-      alert("مشکلی در ارسال لینک‌ها پیش آمد!");
+     
     }
   };
   return (

@@ -44,6 +44,12 @@ export default function Get() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+const handleEdit = async ()=>{
+  const brandId = localStorage.getItem("brandId")
+  console.log(brandId);
+  
+}
+
   useEffect(() => {
     const fetchSocialLinks = async () => {
       try {
@@ -80,6 +86,7 @@ export default function Get() {
     };
 
     fetchSocialLinks();
+    handleEdit();
   }, []);
 
   if (loading) return (<div className="flex justify-center items-center h-24">
