@@ -73,7 +73,8 @@ console.log("🛠 Adjusted ID:", brandId);
 
 localStorage.setItem("brandId", String(brandId));
       console.log("Form submitted successfully:", response.data);
-
+      const brandName = data.Brandname;
+localStorage.setItem("brandName", String(brandName));
       if (step < stepsLength) {
         setStep(step + 1);
       }
