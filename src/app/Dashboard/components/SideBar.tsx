@@ -4,6 +4,8 @@ import { useState } from "react";
 import Info from "./Info";
 import Contributions from "./Contributions";
 import About from "./About";
+import Team from "./Team";
+import Payouts from "./Payouts";
 //import EditorComponent from "./EditorComponent";
 
 const SideBarItem = [
@@ -21,10 +23,10 @@ const ContentComponents = {
   "Info": () => <div><Info/></div>,
   "Contributions Tiers": () => <div><Contributions/></div>,
   "About": () => <div><About/></div>,
-  "Team": () => <div>Team</div>,
+  "Team": () => <div><Team/></div>,
   "Updates": () => <div>Updates</div>,
   "Expenses": () => <div>Expenses</div>,
-  "Pay out": () => <div>Pay out</div>,
+  "Pay out": () => <div><Payouts/></div>,
 };
 
 export default function SideBar() {
