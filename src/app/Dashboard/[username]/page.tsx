@@ -1,13 +1,15 @@
-'use client';
-
+"use client"
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { client } from '@/lib/axios';
 import Navbar from '@/app/components/Navbar';
 import SideBar from '../components/SideBar';
 
-export default function Page() {
-  const { username } = useParams();
+export default function Page({params}) {
+  const unwrappedParams = React.use(params);
+  const paramss = useParams();
+  const  username  = paramss.username;
   const [isValid, setIsValid] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -51,7 +53,9 @@ export default function Page() {
   }, [username]);
 
   if (isValid === null) {
-    return <h1>Loading...</h1>;
+    return <div className="flex items-center justify-center">
+  <div className="w-30 h-30 border-4 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin flex justify-center items-center mt-50"></div>
+</div>;
   }
 
   if (!isValid) {

@@ -1,5 +1,4 @@
 "use client";
-import React from 'react';
 import Image from 'next/image';
 import Congratulation from '../../../../../public/Congratulation.png';
 import Link from 'next/link';
@@ -8,6 +7,7 @@ import { useUser } from '@/context/UserContext';
 export default function Page() {
   const { username } = useUser();  
 
+const brandName = localStorage.getItem("brandName");
   return (
     <div className='flex flex-col justify-center items-center gap-y-4 mt-15'>
       <p className='text-[var(--color-primary)] text-4xl font-bold'>Congratulation !</p>
@@ -18,7 +18,7 @@ export default function Page() {
       <p className='text-[var(--color-gray-2)] text-lg'>
         Welcome aboard! Lets dive in and get started
       </p>
-      <Link className='mt-20' href={ `/Profile/${username}`}>
+      <Link className='mt-20' href={ `/Profile/${brandName}`}>
         <span className='px-4 py-2.5 bg-[var(--color-primary)] text-white rounded mt-5'>
           Go to my profile
         </span>

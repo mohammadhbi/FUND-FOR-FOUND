@@ -58,6 +58,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { UserProvider } from "@/context/UserContext";
 import ReactQueryProvider from "./ReactQueryProvider"; 
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -83,6 +84,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ReactQueryProvider>
           <UserProvider>
+            
             {children}
             <ToastContainer
               position="top-right"
@@ -95,6 +97,7 @@ export default function RootLayout({
               pauseOnHover
               theme="light"
             />
+          
           </UserProvider>
         </ReactQueryProvider>
       </body>

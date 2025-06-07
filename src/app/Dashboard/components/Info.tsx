@@ -1,3 +1,4 @@
+"use client";
 import CreateBrandForm from "@/app/components/CreateBrandForm";
 
 export default function Info() {
