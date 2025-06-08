@@ -11,7 +11,7 @@ export default function PublicComponent() {
      <div className="pb-10">
        <ProfileImageP/>
       </div>
-     <div className="mt-10">
+     <div className="mt-10 ml-15">
        <AddTierP/>
      </div>
      <div>

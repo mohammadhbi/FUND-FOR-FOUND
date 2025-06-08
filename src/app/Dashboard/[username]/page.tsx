@@ -6,10 +6,8 @@ import { client } from '@/lib/axios';
 import Navbar from '@/app/components/Navbar';
 import SideBar from '../components/SideBar';
 
-export default function Page({params}) {
-  const unwrappedParams = React.use(params);
-  const paramss = useParams();
-  const  username  = paramss.username;
+export default function Page() {
+  const { username } = useParams();
   const [isValid, setIsValid] = useState<boolean | null>(null);
 
   useEffect(() => {
