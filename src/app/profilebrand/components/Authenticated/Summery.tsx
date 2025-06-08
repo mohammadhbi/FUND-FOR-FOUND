@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { client } from "@/lib/axios";
 import { toast } from "react-toastify";
 
-const EditorJS = dynamic(() => import("../components/EditorInstance"), {
+const EditorJS = dynamic(() => import("../Authenticated/EditorInstance"), {
   ssr: false,
 });
 

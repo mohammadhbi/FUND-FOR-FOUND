@@ -4,15 +4,16 @@ import { client } from "@/lib/axios";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import React from "react";
-import ProfileImage from "../components/ProfileImage";
+import ProfileImage from "../components/Authenticated/ProfileImage";
 import Navbar from "../../components/Navbar";
-import Contribute from "../components/Contribute";
-import AddTier from "../components/AddTier";
+import Contribute from "../components/Authenticated/Contribute";
+import AddTier from "../components/Authenticated/AddTier";
 import dynamic from "next/dynamic";
-import Team from "../components/Team";
-import Faq from "../components/Faq";
+import Team from "../components/Authenticated/Team";
+import Faq from "../components/Authenticated/Faq";
 import Footer from "@/app/auth/components/Footer";
-const Summery = dynamic(() => import("../components/Summery"), { ssr: false });
+import PublicComponent from "../components/PublicComponent";
+const Summery = dynamic(() => import("../components/Authenticated/Summery"), { ssr: false });
 
 
 export default function Page() {
@@ -66,7 +67,9 @@ useEffect(() => {
   }
 
   if (!isValid) {
-    return <h1>Unauthorized: BrandName mismatch or invalid token</h1>;
+    return <div>
+      <PublicComponent/>
+    </div>;
   }
 
   return (

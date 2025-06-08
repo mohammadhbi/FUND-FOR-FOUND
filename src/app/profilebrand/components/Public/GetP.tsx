@@ -18,6 +18,7 @@ import {
   FaChevronUp,
   FaLink,
 } from "react-icons/fa";
+import { JSX } from "react/jsx-runtime";
 type SocialLink = {
   id: number;
   url: string;
@@ -25,7 +26,7 @@ type SocialLink = {
   social: string;
 };
 
-const socialIcons: { [key: string]: JSX.ELement } = {
+const socialIcons: { [key: string]: JSX.Element } = {
   Website: <FaGlobe />,
   Youtube: <FaYoutube />,
   Instagram: <FaInstagram />,
@@ -43,12 +44,6 @@ export default function Get() {
   const [links, setLinks] = useState<SocialLink[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-const handleEdit = async ()=>{
-  const brandId = localStorage.getItem("brandId")
-  console.log(brandId);
-  
-}
 
   useEffect(() => {
     const fetchSocialLinks = async () => {
@@ -72,10 +67,6 @@ const handleEdit = async ()=>{
         );
 
         const userSocials = res.data.data || [];
-        // console.log("userId:", userId);
-        // console.log("Full response:", res.data);
-        // console.log("Extracted data:", res.data.data);
-
         setLinks(userSocials);
       } catch (err) {
         setError("Failed to fetch social links.");
@@ -86,7 +77,7 @@ const handleEdit = async ()=>{
     };
 
     fetchSocialLinks();
-    handleEdit();
+  
   }, []);
 
   if (loading) return (<div className="flex justify-center items-center h-24">
@@ -118,23 +109,6 @@ const handleEdit = async ()=>{
           })}
         </ul>
       )}
-      <button className="left-15 mb-3 bg-[var(--color-primary-75)] text-[var(--color-primary)] px-2 py-1 rounded text-xs flex  justify-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-3"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-          />
-        </svg>
-        Edit
-      </button>
     </div>
   );
 }

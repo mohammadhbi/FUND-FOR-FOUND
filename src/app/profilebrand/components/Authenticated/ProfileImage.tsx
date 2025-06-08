@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import defaultProfile from "../../../../public/defaultProfile.png";
+import defaultProfile from "../../../../../public/defaultProfile.png";
 import { useCallback, useRef, useState, useEffect } from "react";
-import ProfileAvatar from "../components/ProfileAvatar";
-import Get from "./Get";
+import ProfileAvatar from "../Authenticated/ProfileAvatar";
+import Get from "../Authenticated/Get";
 import imageCompression from 'browser-image-compression';
 
 export default function ProfileImage() {
@@ -60,7 +60,7 @@ const convertToBase64 = (file: File): Promise<string> => {
     //   setImageSrc(objectUrl);
     // }
     try {
-      const compressedFile = await compressImage(file);
+      const compressedFile = await compressImage(file );
       const base64 = await convertToBase64(compressedFile);
       setImageSrc(base64);
       // console.log(base64);
