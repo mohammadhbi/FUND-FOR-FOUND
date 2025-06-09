@@ -9,7 +9,7 @@ import LogoAuth from "../../../../public/LogoAuth.png";
 import Link from "next/link";
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { EyeSlashIcon } from "@heroicons/react/16/solid";
-import GoogleLoginButton from "../components/GoogleLoginButton";
+import GoogleLoginButton from "../Login/components/GoogleLoginButton";
 import NavbarsignUp from "@/app/components/Navbars component/Navbar-signUp";
 import { client } from "@/lib/axios";
 const SignUpForm = () => {
@@ -151,7 +151,7 @@ const SignUpForm = () => {
             />
             <div className="flex justify-between items-center">
               <p className="text-[var(--color-primary)]">
-                <Link href="/auth/Login">already have an account?</Link>
+                <Link href="/auth/login">already have an account?</Link>
               </p>
               <span
                 onClick={() => setIsshowPassword(!isshowPassword)}
