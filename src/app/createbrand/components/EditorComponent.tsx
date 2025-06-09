@@ -101,14 +101,14 @@ const EditorComponent = () => {
       const savedData = await editorRef.current.save();
       console.log("Saved data:", savedData);
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const Id = localStorage.getItem("brandId");
       const response = await client.post(
         "/editor-contents",
         {
           data: {
             Title: "Brand story",
             content: savedData,
-            users_permissions_user: userId,
+            brand_form: [Id],
           },
         },
         {

@@ -72,9 +72,10 @@ const SOCIALS = [
   },
 ] as const;
 
-import { client } from "@/lib/axios";
+//import { client } from "@/lib/axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 type SocialType = (typeof SOCIALS)[number];
 type SocialLink = {
@@ -126,15 +127,18 @@ const router =useRouter();
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const brandId = localStorage.getItem("brandId");
+      const Id = Number(brandId)+1;
+       console.log("Id :" ,Id);
       const requests = links.map((link) =>
-        client.post(
-          "/social-links",
+        axios.post(
+          "http://localhost:1337/api/socials",
           {
             data: {
               social: link.type.value,
               url: link.url,
-              users_permissions_user: userId
+              brand_form: [Id]
+
             },
           },
           {
@@ -150,7 +154,7 @@ const router =useRouter();
       router.push("/createbrand/IntroBrand/Success");
     } catch (error) {
       console.error("❌ error", error);
-     
+    
     }
   };
   return (

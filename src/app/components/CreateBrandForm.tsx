@@ -66,7 +66,7 @@ export default function CreateBrandForm() {
 // I'm manually adjusting the ID here as a temporary workaround.
 
 const actualId = response.data.data.id;
-const brandId = actualId - 1;
+const brandId = actualId ;
 
 console.log("📦 Real ID:", actualId);
 console.log("🛠 Adjusted ID:", brandId);
