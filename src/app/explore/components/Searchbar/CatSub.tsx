@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FaAngleDown } from "react-icons/fa";
-import { FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 const categories = [
   {
@@ -60,38 +59,49 @@ const categories = [
   },
 ];
 
-export default function CatSub() {
-  const [openMenu, setOpenMenu] = useState<string | null>(null); 
-const[isOpen,setIsOpen] = useState(false);
 
+const additionalFilters = [
+  {
+    title: "Sort by",
+    items: ["Most funded", "Reward price (Lowest)", "Reward price (Highest)", "Newest"],
+  },
+  {
+    title: "Country",
+    items: ["All country","Iran", "USA", "UAE", "UK"],
+  },
+];
+
+export default function CatSub() {
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   const toggleMenu = (title: string) => {
     setOpenMenu(openMenu === title ? null : title);
   };
 
   return (
-    <div className="mx-auto w-[90%]  rounded-b-4xl shadow-[0_10px_15px_-5px_rgba(0,0,0,0.3),-5px_0_15px_-5px_rgba(0,0,0,0.3),5px_0_15px_-5px_rgba(0,0,0,0.3)]">
-      <p className="text-2xl text-[var(--color-primary)] flex justify-center">
+    <div className="mx-auto w-[90%] rounded-b-4xl shadow-[0_10px_15px_-5px_rgba(0,0,0,0.3),-5px_0_15px_-5px_rgba(0,0,0,0.3),5px_0_15px_-5px_rgba(0,0,0,0.3)]">
+      <p className="text-2xl text-[var(--color-primary)] flex justify-center py-4">
         Categories & Subcategories
       </p>
-      <div className="flex text-2xs gap-3 justify-center">
+      
+      <div className="flex justify-center gap-2 mb-6">
         {categories.map((category) => (
           <div
             key={category.title}
-            className="border-[var(--color-primary)]  text-[var(--color-primary)]flex bg-gray-200 rounded text-xs relative"
+            className="relative"
           >
             <button
               onClick={() => toggleMenu(category.title)}
-              className="px-2 py-1 flex-1 text-center text-[var(--color-primary)]"
+              className="text-[11px] py-1 px-0.5 text-[var(--color-primary)] bg-gray-200 rounded-md hover:bg-opacity-90 focus:outline-none"
             >
               {category.title}
             </button>
             {openMenu === category.title && (
-              <div className="absolute left-0 text-[var(--color-primary)] w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 {category.items.map((item) => (
                   <div
                     key={item}
-                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer text-[var(--color-primary)] "
+                    className="px-4 py-2 text-[var(--color-primary)] hover:bg-gray-100 cursor-pointer"
                   >
                     {item}
                   </div>
@@ -101,18 +111,36 @@ const[isOpen,setIsOpen] = useState(false);
           </div>
         ))}
       </div>
-      <div className="flex justify-center mt-10 gap-4 pb-4">
-        <div  className="border-[var(--color-primary)] text-[var(--color-primary)] p-1 px-1.5 bg-gray-200 rounded text-xs">
-          Most funded
-          <div className="mt-0.75"></div>
-        </div>
-        <div onClick={()=>setIsOpen(!isOpen)} className="flex text-[var(--color-primary)] border-[var(--color-primary)] p-1 px-1.5 bg-gray-200 rounded text-xs">
-          Country
-          <div className="pl-0.5 mt-0.75"> {isOpen ? <FaAngleUp /> : <FaAngleDown />}</div>
-        </div>
-        {isOpen && (<div>
-
-        </div>)}
+      
+      <div className="flex justify-center gap-4 pb-2">
+        {additionalFilters.map((filter) => (
+          <div
+            key={filter.title}
+            className="relative"
+          >
+            <button
+              onClick={() => toggleMenu(filter.title)}
+              className="text-[11px] py-1 px-1.5 text-[var(--color-primary)] bg-gray-200 rounded-md hover:bg-opacity-90 focus:outline-none flex items-center"
+            >
+              {filter.title}
+              <span className="ml-2">
+                {openMenu === filter.title ? <FaAngleUp /> : <FaAngleDown />}
+              </span>
+            </button>
+            {openMenu === filter.title && (
+              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                {filter.items.map((item) => (
+                  <div
+                    key={item}
+                    className="px-4 py-2 text-[var(--color-primary)] hover:bg-gray-100 cursor-pointer"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
