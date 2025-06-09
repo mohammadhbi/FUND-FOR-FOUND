@@ -3,8 +3,8 @@
 import Image from "next/image";
 import defaultProfile from "../../../../../public/defaultProfile.png";
 import {  useState, useEffect } from "react";
-import ProfileAvatarP from "../Public/ProfileAvatarP";
-import Get from "./GetP";
+import ProfileAvatarP from "./Profile images/ProfileAvatarP";
+import Get from "./GetSocialmediaLink/GetP";
 export default function ProfileImage() {
   
   //const [imageSrc, setImageSrc] = useState<string | null>(null);

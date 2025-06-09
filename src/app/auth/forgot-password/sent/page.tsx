@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/app/components/Navbars component/Navbar";
 
 function Sent() {
   const searchParams = useSearchParams();

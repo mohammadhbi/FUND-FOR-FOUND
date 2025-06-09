@@ -1,6 +1,6 @@
 "use client";
 import React from 'react'
-import EditorComponent from '../createbrand/components/EditorComponent'
+import EditorComponent from '../Editor Summery/EditorComponent'
 import Link from 'next/link'
 export default function IntroBrand() {
   return (

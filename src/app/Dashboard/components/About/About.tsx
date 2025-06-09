@@ -1,5 +1,5 @@
 "use client";
-import EditorComponent from '@/app/createbrand/components/EditorComponent'
+import EditorComponent from '@/app/createbrand/IntroBrand/components/Editor Summery/EditorComponent'
 import React from 'react'
 
 export default function About() {

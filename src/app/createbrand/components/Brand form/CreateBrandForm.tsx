@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import NextButtonStep from "../createbrand/components/NextButtonStep";
+import NextButtonStep from "../../IntroBrand/components/Editor Summery/NextButtonStep";
 import { useRouter } from "next/navigation";
 import { client } from "@/lib/axios";
 

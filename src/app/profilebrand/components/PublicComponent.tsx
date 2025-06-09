@@ -1,9 +1,9 @@
 import React from 'react'
-import AddTierP from './Public/AddTierP'
+import AddTierP from './Public/Tier/AddTierP'
 import ProfileImageP from './Public/ProfileImageP'
 import SummeryP from './Public/SummeryP'
-import TeamP from './Public/TeamP'
-import FaqP from './Public/FaqP'
+import TeamP from './Public/Team/TeamP'
+import FaqP from './Public/Faq/FaqP'
 import Footer from '@/app/auth/components/Footer'
 export default function PublicComponent() {
   return (

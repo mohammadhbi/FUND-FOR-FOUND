@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/app/components/Navbars component/Navbar";
 import Image from "next/image";
 import Link from "next/link";
 import ForgotpasswordI from "../../../../public/ForgotpasswordI.png";

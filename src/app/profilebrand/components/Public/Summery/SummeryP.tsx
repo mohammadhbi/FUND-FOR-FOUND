@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { client } from "@/lib/axios";
-import { toast } from "react-toastify";
 
-const EditorJS = dynamic(() => import("../Authenticated/EditorInstance"), {
+
+const EditorJS = dynamic(() => import("./Summery/EditorInstanceP"), {
   ssr: false,
 });
 
@@ -36,15 +36,12 @@ interface EditorContentItem {
 }
 
 export default function Summary() {
-  const editorRef = useRef<any>(null);
   const [contents, setContents] = useState<EditorContentItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<EditorContentItem | null>(
-    null
-  );
-  const [editorData, setEditorData] = useState<EditorContent | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  
+
+
+
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -77,87 +74,7 @@ export default function Summary() {
     fetchSummary();
   }, []);
 
-  useEffect(() => {
-    if (!showModal) return;
-
-    const initEditor = async () => {
-      const EditorJS = (await import("@editorjs/editorjs")).default;
-      const Paragraph = (await import("@editorjs/paragraph")).default;
-      const List = (await import("@editorjs/list")).default;
-      const Header = (await import("@editorjs/header")).default;
-      const Quote = (await import("@editorjs/quote")).default;
-      const Code = (await import("@editorjs/code")).default;
-
-      const holder = document.getElementById("editorjs");
-      if (!holder) return;
-
-      editorRef.current = new EditorJS({
-        holder: "editorjs",
-        tools: {
-          paragraph: Paragraph,
-          list: List,
-          header: Header,
-          quote: Quote,
-          code: Code,
-        },
-        data: editorData ?? { blocks: [] },
-        onReady: () => console.log("Editor is ready"),
-      });
-    };
-
-    initEditor();
-
-    return () => {
-      if (
-        editorRef.current &&
-        typeof editorRef.current.destroy === "function"
-      ) {
-        editorRef.current.destroy();
-        editorRef.current = null;
-      }
-    };
-  }, [showModal]);
-
-  const handleEditClick = (item: EditorContentItem) => {
-    setSelectedItem(item);
-    setEditorData(item.content);
-    setShowModal(true);
-  };
-
-  const handleSave = async () => {
-    if (!editorRef.current || !selectedItem) return;
-    setLoading(true);
-    try {
-      const savedData = await editorRef.current.save();
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
-    
-      await client.put(
-        `/editor-contents/${selectedItem.id}`,
-        {
-          data: {
-            Title: selectedItem.Title,
-            content: savedData,
-             users_permissions_user: userId,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.success("Summary updated successfully");
-      setIsSaved(true);
-    } catch (error) {
-      toast.error("Error saving summary");
-      console.error(error);
-      console.log(selectedItem?.id)
-    } finally {
-      setLoading(false);
-      setShowModal(false);
-    }
-  };
+  
 
   return (
     <div>
@@ -178,7 +95,7 @@ export default function Summary() {
                       <li key={i}>
                         {typeof li === "string"
                           ? li
-                          : (li as any).content ?? "[item]"}
+                          : li.content ?? "[item]"}
                       </li>
                     ))}
                   </ul>
@@ -201,7 +118,7 @@ export default function Summary() {
 
           <div className="absolute top-0 left-15 flex gap-3 pb-3">
             <p className="text-xl">About</p>
-            <button
+            {/* <button
               onClick={() => handleEditClick(item)}
               className="text-xs bg-[var(--color-primary-75)] text-[var(--color-primary)] px-2 py-1.5 rounded shadow-sm hover:shadow-md transition flex "
             >
@@ -220,12 +137,12 @@ export default function Summary() {
                 />
               </svg>
               Edit
-            </button>
+            </button> */}
           </div>
         </div>
       ))}
 
-      {showModal && (
+      {/* {showModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
           <div className="bg-white max-w-xl w-full mx-auto rounded-xl shadow-lg border border-gray-200 p-5 space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
@@ -256,7 +173,7 @@ export default function Summary() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

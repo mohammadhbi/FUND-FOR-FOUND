@@ -1,5 +1,5 @@
 "use client";
-import NavbarHome from "./components/NavbarHome";
+import NavbarHome from "./components/Navbars component/NavbarHome";
 import Image from "next/image";
 import Bag from "../../public/Bag.png";
 import Link from "next/link";

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Info from "./Info";
-import Contributions from "./Contributions";
-import About from "./About";
+import Info from "./Info/Info";
+import Contributions from "./Contributions/Contributions";
+import About from "./About/About";
 import Team from "./Team";
-import Payouts from "./Payouts";
+import Payouts from "./Payouts/Payouts";
 //import EditorComponent from "./EditorComponent";
 
 const SideBarItem = [

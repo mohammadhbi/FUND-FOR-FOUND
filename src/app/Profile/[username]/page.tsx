@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import ProfileImage from "../components/ProfileImage";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbars component/Navbar";
 import Contribute from "../components/Contribute";
 import AddTier from "../components/AddTier";
 import dynamic from "next/dynamic";

@@ -10,7 +10,7 @@ import Link from "next/link";
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { EyeSlashIcon } from "@heroicons/react/16/solid";
 import GoogleLoginButton from "../components/GoogleLoginButton";
-import NavbarsignUp from "@/app/components/Navbar-signUp";
+import NavbarsignUp from "@/app/components/Navbars component/Navbar-signUp";
 import { client } from "@/lib/axios";
 const SignUpForm = () => {
   const [email, setEmail] = useState("");

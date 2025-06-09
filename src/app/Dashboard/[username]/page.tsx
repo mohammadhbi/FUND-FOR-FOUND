@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { client } from '@/lib/axios';
-import Navbar from '@/app/components/Navbar';
+import Navbar from '@/app/components/Navbars component/Navbar';
 import SideBar from '../components/SideBar';
 
 export default function Page() {
