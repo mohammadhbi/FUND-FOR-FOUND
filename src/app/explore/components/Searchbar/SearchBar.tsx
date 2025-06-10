@@ -12,7 +12,7 @@ export default function SearchBar() {
     setSearchValue("");
   };
   return (
-    <div className="w-[90%] ml-9.5">
+    <div className="w-[90%] mx-auto">
       <div className="relative w-full h-auto">
         <Image
           className="w-full h-auto object-cover"

@@ -151,7 +151,7 @@ const SignUpForm = () => {
             />
             <div className="flex justify-between items-center">
               <p className="text-[var(--color-primary)]">
-                <Link href="/auth/login">already have an account?</Link>
+                <Link href="/auth/Login">already have an account?</Link>
               </p>
               <span
                 onClick={() => setIsshowPassword(!isshowPassword)}

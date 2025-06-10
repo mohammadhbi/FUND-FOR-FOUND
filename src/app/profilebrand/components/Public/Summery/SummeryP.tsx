@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { client } from "@/lib/axios";
 
 
-const EditorJS = dynamic(() => import("./Summery/EditorInstanceP"), {
+const EditorJS = dynamic(() => import("../Summery/EditorInstanceP"), {
   ssr: false,
 });
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import logosignup from "../../../public/logosignup.png";
+import logosignup from "../../../../public/logosignup.png";
 const navItems = [
   { name: "Home", href: "/" },
   { name: "Brand and organization", href: "/explore" },

@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import defaultProfile from "../../../../../public/defaultProfile.png";
+import defaultProfile from "../../../../../../public/defaultProfile.png";
 import { useCallback, useRef, useState, useEffect } from "react";
-import ProfileAvatar from "./Profile images/ProfileAvatar";
-import Get from "./GetSocilalmediaLink/Get";
+import ProfileAvatar from "./ProfileAvatar";
+import Get from "../GetSocilalmediaLink/Get";
 import imageCompression from 'browser-image-compression';
 
 export default function ProfileImage() {
