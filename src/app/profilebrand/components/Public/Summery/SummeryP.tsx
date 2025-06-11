@@ -47,9 +47,9 @@ export default function Summary() {
     const fetchSummary = async () => {
       try {
         const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId");
+       
         const res = await client.get(
-          `/editor-contents?filters[users_permissions_user][id][$eq]=${userId}&populate=*`,
+          `/editor-contents?filters[brand-forms][id][$eq]=${brandId}&populate=*`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,62 +118,10 @@ export default function Summary() {
 
           <div className="absolute top-0 left-15 flex gap-3 pb-3">
             <p className="text-xl">About</p>
-            {/* <button
-              onClick={() => handleEditClick(item)}
-              className="text-xs bg-[var(--color-primary-75)] text-[var(--color-primary)] px-2 py-1.5 rounded shadow-sm hover:shadow-md transition flex "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-3"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                />
-              </svg>
-              Edit
-            </button> */}
+            
           </div>
         </div>
       ))}
-
-      {/* {showModal && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-          <div className="bg-white max-w-xl w-full mx-auto rounded-xl shadow-lg border border-gray-200 p-5 space-y-4">
-            <h2 className="text-lg font-semibold text-gray-800 border-b pb-2">
-              Edit Summary
-            </h2>
-            <div
-              id="editorjs"
-              className="min-h-[250px] max-h-[350px] overflow-y-auto border border-gray-200 rounded-md p-3"
-            />
-            <div className="flex justify-end gap-2 pt-3">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-1 text-sm border border-gray-300 text-gray-700 rounded hover:bg-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={isSaved}
-                className={`px-4 py-1 text-sm rounded text-white transition ${
-                  isSaved
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-[var(--color-primary)] hover:bg-purple-700"
-                }`}
-              >
-                {isSaved ? "Saved" : "Save"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }
